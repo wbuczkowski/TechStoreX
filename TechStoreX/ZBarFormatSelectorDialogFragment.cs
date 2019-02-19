@@ -19,7 +19,8 @@ namespace TechStoreX
             SetRetainInstance(true);
         }
 
-        public static ZBarFormatSelectorDialogFragment NewInstance(FormatSelectorDialogListener listener, ArrayList<Integer> selectedIndices)
+        public static ZBarFormatSelectorDialogFragment NewInstance(FormatSelectorDialogListener listener, 
+            ArrayList<int> selectedIndices)
         {
             ZBarFormatSelectorDialogFragment fragment = new ZBarFormatSelectorDialogFragment();
             if (selectedIndices == null)

@@ -20,7 +20,8 @@ namespace TechStoreX
             SetRetainInstance(true);
         }
 
-        public static ZXingFormatSelectorDialogFragment NewInstance(FormatSelectorDialogListener listener, ArrayList<Integer> selectedIndices)
+        public static ZXingFormatSelectorDialogFragment NewInstance(FormatSelectorDialogListener listener, 
+            ArrayList<int> selectedIndices)
         {
             ZXingFormatSelectorDialogFragment fragment = new ZXingFormatSelectorDialogFragment();
             if (selectedIndices == null)
