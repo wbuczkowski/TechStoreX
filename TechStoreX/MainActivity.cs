@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Linq;
-
 using Android.App;
 using Android.OS;
 using Android.Content;
 using Android.Support.Design.Widget;
-using Android.Support.V7.App;
 using Android.Views;
 using Android.Widget;
 
@@ -31,13 +28,13 @@ namespace TechStoreX
             FloatingActionButton fab = FindViewById<FloatingActionButton>(Resource.Id.fab);
             //fab.SetOnClickListener(fabListener);
             fab.Click += FabOnClick;
-            Button button = FindViewById(Resource.Id.button_goods_issue);
+            Button button = FindViewById<Button>(Resource.Id.button_goods_issue);
             button.SetOnClickListener(this);
-            button = FindViewById(Resource.Id.button_goods_return);
+            button = FindViewById<Button>(Resource.Id.button_goods_return);
             button.SetOnClickListener(this);
-            button = FindViewById(Resource.Id.button_inventory);
+            button = FindViewById<Button>(Resource.Id.button_inventory);
             button.SetOnClickListener(this);
-            button = FindViewById(Resource.Id.button_display);
+            button = FindViewById<Button>(Resource.Id.button_display);
             button.SetOnClickListener(this);
             if (savedInstanceState != null)
             {
@@ -47,7 +44,7 @@ namespace TechStoreX
             {
                 UserName = Intent.GetStringExtra(Intent.ExtraText);
             }
-            Status = FindViewById(Resource.Id.text_status);
+            Status = FindViewById<TextView>(Resource.Id.text_status);
             SetStatusText();
         }
 

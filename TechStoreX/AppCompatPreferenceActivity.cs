@@ -1,7 +1,10 @@
 using Android.OS;
 using Android.Support.V7.App;
-using Android.Preference.PreferenceActivity;
 using Android.Views;
+using Android.Preferences;
+using Android.Content.Res;
+using Android.Graphics;
+using Java.Lang;
 
 namespace TechStoreX
 {
@@ -24,12 +27,12 @@ namespace TechStoreX
 
         ActionBar GetSupportActionBar()
         {
-            return GetDelegate().GetSupportActionBar();
+            return GetDelegate().SupportActionBar;
         }
 
         public MenuInflater GetMenuInflater()
         {
-            return GetDelegate().GetMenuInflater();
+            return GetDelegate().MenuInflater;
         }
 
         public override void SetContentView(int layoutResID)
@@ -58,7 +61,7 @@ namespace TechStoreX
             GetDelegate().OnPostResume();
         }
 
-        protected override void OnTitleChanged(CharSequence title, int color)
+        protected override void OnTitleChanged(ICharSequence title, Color color)
         {
             base.OnTitleChanged(title, color);
             GetDelegate().SetTitle(title);
@@ -82,7 +85,7 @@ namespace TechStoreX
             GetDelegate().OnDestroy();
         }
 
-        public void InvalidateOptionsMenu()
+        public override void InvalidateOptionsMenu()
         {
             GetDelegate().InvalidateOptionsMenu();
         }
