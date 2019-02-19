@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarcodeScanner.ZXing", "..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarcodeScanner.Core", "..\BarcodeScanner\BarcodeScanner.Core\BarcodeScanner.Core.csproj", "{C96494A0-C052-49D3-A072-3848E88DAA8B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarcodeScanner.ZBar", "..\BarcodeScanner\BarcodeScanner.ZBar\BarcodeScanner.ZBar.csproj", "{5E93F659-2C3F-475B-899F-D1936BD41E3F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{C96494A0-C052-49D3-A072-3848E88DAA8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C96494A0-C052-49D3-A072-3848E88DAA8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C96494A0-C052-49D3-A072-3848E88DAA8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E93F659-2C3F-475B-899F-D1936BD41E3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E93F659-2C3F-475B-899F-D1936BD41E3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E93F659-2C3F-475B-899F-D1936BD41E3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E93F659-2C3F-475B-899F-D1936BD41E3F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
