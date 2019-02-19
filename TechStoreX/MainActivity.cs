@@ -249,7 +249,7 @@ namespace TechStoreX
                 option = OPTION_INVENTORY_WITH_DOCUMENT;
                 inventory = splitData[0].Substring(1);
             }
-            if (option.isEmpty())
+            if (option.Length == 0)
             {
                 Snackbar.Make(FindViewById(Resource.Id.fab),
                         Resource.String.barcode_unknown,
@@ -359,7 +359,8 @@ namespace TechStoreX
         private string prepareData(Intent intent)
         {
             string data = intent.GetStringExtra(EXTRA_OPTION);
-            if (data == null || data.isEmpty())
+            // if (data == null || data.isEmpty())
+            if (data.Length == 0)
             {
                 // wrong intent?
                 return null;
@@ -372,7 +373,8 @@ namespace TechStoreX
                 case OPTION_GOODS_ISSUE:
                 case OPTION_GOODS_RETURN:
                     data = intent.GetStringExtra(EXTRA_WORK_ORDER);
-                    if (data != null && !data.isEmpty())
+                    //if (data != null && !data.isEmpty())
+                    if (data.Length != 0)
                     {
                         // write work order
                         dataLine = dataLine + "\t" + data;
@@ -381,7 +383,8 @@ namespace TechStoreX
                     {
                         // no work order, take cost center
                         data = intent.GetStringExtra(EXTRA_COST_CENTER);
-                        if (data != null && !data.isEmpty())
+                        // if (data != null && !data.isEmpty())
+                        if (data.Length != 0)
                         {
                             // write cost center
                             dataLine = dataLine + "\t" + data;
@@ -415,7 +418,8 @@ namespace TechStoreX
             foreach (String[] i in ii)
             {
                 data = intent.GetStringExtra(i[0]);
-                if (data != null && !data.isEmpty())
+                // if (data != null && !data.isEmpty())
+                if (data.Length != 0)
                 { // write data
                     dataLine = dataLine + "\t" + data;
                 }
@@ -437,7 +441,8 @@ namespace TechStoreX
 
             //write date
             data = intent.GetStringExtra(EXTRA_DATE);
-            if (data != null && !data.isEmpty())
+            // if (data != null && !data.isEmpty())
+            if (data.Length != 0)
             { // write data
                 dataLine = dataLine + "\t" + data;
             }
@@ -451,7 +456,8 @@ namespace TechStoreX
             {
                 // write inventory document
                 data = intent.GetStringExtra(EXTRA_INVENTORY);
-                if (data != null && !data.isEmpty())
+                // if (data != null && !data.isEmpty())
+                if (data.Length != 0)
                 { // write data
                     dataLine = dataLine + "\t" + data;
                 }
@@ -467,7 +473,8 @@ namespace TechStoreX
             }
             // write vendor
             data = intent.GetStringExtra(EXTRA_VENDOR);
-            if (data != null && !data.isEmpty())
+            // if (data != null && !data.isEmpty())
+            if (data.Length != 0)
             {
                 // write vendor
                 dataLine = dataLine + "\t" + data;

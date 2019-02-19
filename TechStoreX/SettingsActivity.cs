@@ -38,39 +38,40 @@ namespace TechStoreX
                 }
 
             }
-            else if (preference is RingtonePreference)
-            {
-                // For ringtone preferences, look up the correct display value
-                // using RingtoneManager.
-                if (TextUtils.isEmpty(stringValue))
-                {
-                    // Empty values correspond to 'silent' (no ringtone).
-                    preference.SetSummary(Resource.String.pref_ringtone_silent);
+            // else if (preference is RingtonePreference)
+            // {
+            //     // For ringtone preferences, look up the correct display value
+            //     // using RingtoneManager.
+            //     // if (TextUtils.isEmpty(stringValue))
+            //     if (stringValue.Length == 0)
+            //     {
+            //         // Empty values correspond to 'silent' (no ringtone).
+            //         preference.SetSummary(Resource.String.pref_ringtone_silent);
 
-                }
-                else
-                {
-                    Ringtone ringtone = RingtoneManager.GetRingtone(
-                            preference.GetContext(), Uri.Parse(stringValue));
+            //     }
+            //     else
+            //     {
+            //         Ringtone ringtone = RingtoneManager.GetRingtone(
+            //                 preference.GetContext(), Uri.Parse(stringValue));
 
-                    if (ringtone == null)
-                    {
-                        // Clear the summary if there was a lookup error.
-                        preference.SetSummary(null);
-                    }
-                    else
-                    {
-                        // Set the summary to reflect the new ringtone display
-                        // name.
-                        string name = ringtone.GetTitle(preference.GetContext());
-                        preference.SetSummary(name);
-                    }
-                }
+            //         if (ringtone == null)
+            //         {
+            //             // Clear the summary if there was a lookup error.
+            //             preference.SetSummary(null);
+            //         }
+            //         else
+            //         {
+            //             // Set the summary to reflect the new ringtone display
+            //             // name.
+            //             string name = ringtone.GetTitle(preference.GetContext());
+            //             preference.SetSummary(name);
+            //         }
+            //     }
 
-            }
+            // }
             else
             {
-                // validate plant and storage location values
+                // validate values
                 switch (preference.GetKey())
                 {
                     case "pref_default_plant":
