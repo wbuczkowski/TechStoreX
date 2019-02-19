@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-<!--
+    tools:context=".LoginActivity">
+
+    <!--
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,8 +20,9 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
--->
-    <include layout="@layout/content_main" />
+    -->
+
+    <include layout="@layout/content_login" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -28,7 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-		app:fabSize="normal"
-        app:srcCompat="@drawable/ic_supermarket_barcode" />
+        app:srcCompat="@drawable/ic_supermarket_barcode"
+        app:fabSize="normal" />
 
 </android.support.design.widget.CoordinatorLayout>

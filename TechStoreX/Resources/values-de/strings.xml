@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_activity_settings">Einstellungen</string>
+    <string name="title_activity_zbar">ZBar Scanner</string>
+    <string name="title_activity_zxing">ZXing Scanner</string>
+    <string name="barcode_success">Barcode erfolgreich gelesen</string>
+    <string name="barcode_failure">Kein Barcode erfasst</string>
+    <string name="barcode_error">Fehler beim Lesen des Barcodes</string>
+    <string name="barcode_unknown">Fehler beim Erkennung des Barcodes</string>
+    <string name="activity_goods_issue">Warenausgang</string>
+    <string name="activity_goods_return">Rücklieferung</string>
+    <string name="activity_inventory">Bestandsaufnahme</string>
+    <string name="activity_display">Ergebnisse anzeigen</string>
+    <string name="text_status">Einträge:</string>
+    <string name="directory_error">Directory not created</string>
+    <string name="file_error">Cannot create file</string>
+    <string name="storage_error">External storage not writable</string>
+    <string name="success">Erfolg</string>
+    <string name="cancelled">Abgebrochen</string>
+    <string name="action_save">Speichern</string>
+    <string name="action_switch">Wechseln</string>
+    <string name="save_error">Bitte vervollständigen Sie die Dateneingabe</string>
+    <string name="work_order_empty">Geben Sie entweder IH-Auftrag oder Kostenstelle ein</string>
+    <string name="work_order_length">Auftrags-Nr should be 10 digits</string>
+    <string name="cost_center_length">Kostenstellen-Kennung soll zwischen 7 und 10 Zeichen sein</string>
+    <string name="inventory_length">Inventurbeleg-Nr soll 9 Ziffern sein</string>
+    <string name="material_empty">Geben Sie Material-Nr ein</string>
+    <string name="material_length">Material-Nr soll 9 Ziffern sein</string>
+    <string name="plant_empty">Geben Sie Werksschlüssel ein</string>
+    <string name="plant_length">Werksschlüssel soll 4 Zeichen sein</string>
+    <string name="storage_location_empty">Geben Sie Lagerort-Nr ein</string>
+    <string name="storage_location_length">Lagerort-Nr soll 4 Zeichen sein</string>
+    <string name="bin_length">Lagerplatz-Kennung soll maximal 10 Zeichen sein</string>
+    <string name="vendor_length">Lieferant-Nr soll 9 Ziffern sein</string>
+    <string name="quantity_empty">Geben Sie Menge in Basis-ME ein</string>
+    <string name="quantity_zero">Menge kann nicht Null sein</string>
+    <string name="quantity_decimals_length">Maximal 3 Nachkommastellen erlaubt</string>
+    <string name="quantity_integers_length">Maximal 10 Vorkommastellen erlaubt</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="pref_header_scanner">Scanner</string>
+    <string name="pref_scan_technology_title">Scantechnologie</string>
+    <string name="pref_header_defaults">Standardwerte</string>
+    <string name="pref_timeout_title">Abmeldezeit</string>
+    <string name="pref_not_selected">Nicht ausgewählt</string>
+    <string name="pref_ringtone_silent">Stumm</string>
+    <string name="text_work_order">IH-Auftrag</string>
+    <string name="text_cost_center">Kostenstelle</string>
+    <string name="text_material">Material</string>
+    <string name="text_plant">Werk</string>
+    <string name="text_storage_location">Lagerort</string>
+    <string name="text_bin">Lagerplatz</string>
+    <string name="text_inventory">Inventurbeleg</string>
+    <string name="text_vendor">Lieferant</string>
+    <string name="text_quantity">Menge in Basis-ME</string>
+    <string name="user_name">Benutzername</string>
+    <string name="login">Einloggen</string>
+    <string name="flash_on">Blitz [EIN]</string>
+    <string name="flash_off">Blitz [AUS]</string>
+    <string name="auto_focus_on">Autofokus [EIN]</string>
+    <string name="auto_focus_off">Autofokus [AUS]</string>
+    <string name="formats">Formate</string>
+    <string name="choose_formats">Wählen Sie Formate aus</string>
+    <string name="select_camera">Wählen Sie eine Kamera aus</string>
+    <string-array name="results_headers">
+        <item>Option</item>
+        <item>Auftr/KS</item>
+        <item>Material</item>
+        <item>Werk</item>
+        <item>LOrt</item>
+        <item>LPlatz</item>
+        <item>Menge</item>
+        <item>Benutzer</item>
+        <item>Datum/Uhrzeit</item>
+        <item>Inventur</item>
+        <item>Lieferant</item>
+    </string-array>
+    <string-array name="pref_timeout_titles">
+        <item>1 Minute</item>
+        <item>2 Minuten</item>
+        <item>3 Minuten</item>
+        <item>5 Minuten</item>
+        <item>10 Minuten</item>
+    </string-array>
+    <string name="login_prompt">Bitte scannen Sie Ihre Benutzer-ID ein</string>
+    <string name="login_error">Fehlerhafte Benutzer-ID!</string>
+</resources>

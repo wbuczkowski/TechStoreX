@@ -10,7 +10,6 @@ using Android.Views;
 
 namespace TechStoreX
 {
-    [Activity(Label = "AppActivity")]
     public abstract class AppActivity : AppCompatActivity, LogoutTimerUtility.ILogOutListener
     {
         const String EXTRA_OPTION = "OPTION";
@@ -67,7 +66,8 @@ namespace TechStoreX
                         {
                             Intent intent;
                             intent = new Intent(view.Context, typeof(SettingsActivity));
-                            intent.PutExtra(PreferenceActivity.ExtraShowFragment, /*SettingsActivity.ScannerPreferenceFragment.class.getName()*/"");
+                            intent.PutExtra(PreferenceActivity.ExtraShowFragment,
+                                typeof(SettingsActivity.ScannerPreferenceFragment).Name);
                             intent.PutExtra(PreferenceActivity.ExtraNoHeaders, true);
                             StartActivity(intent);
                         }).Show();
@@ -177,15 +177,16 @@ namespace TechStoreX
                         }
                         else
                         {
-                            Snackbar.Make(FindViewById(Resource.Id.fab), Resource.String.barcode_failure,
-                                    Snackbar.LengthLong).Show();
+                            Snackbar.Make(FindViewById(Resource.Id.fab),
+                                Resource.String.barcode_failure,
+                                Snackbar.LengthLong).Show();
                         }
                     }
                     else
                     {
                         Snackbar.Make(FindViewById(Resource.Id.fab),
-                                Resource.String.barcode_error,
-                                Snackbar.LengthLong).Show();
+                            Resource.String.barcode_error,
+                            Snackbar.LengthLong).Show();
                     }
                     break;
                 case IntentIntegrator.REQUEST_CODE:
@@ -245,20 +246,18 @@ namespace TechStoreX
                     else
                     {
                         Snackbar.Make(view, "DataWedge is not installed.\n"
-                                + "Please select another scanning technology", Snackbar.LengthLong)
-                                .SetAction(Resource.String.action_settings, v =>
-                                {
-
-                                    Intent intent1;
-                                    intent1 = new Intent(appActivity, typeof(SettingsActivity));
-                                    intent1.PutExtra(PreferenceActivity.ExtraShowFragment,
-                //SettingsActivity.ScannerPreferenceFragment.class.getName()
-                "");
-                                    intent1.PutExtra(PreferenceActivity.ExtraNoHeaders, true);
-                                    appActivity.StartActivity(intent1);
-
-                                })
-                                .Show();
+                            + "Please select another scanning technology", 
+                            Snackbar.LengthLong)
+                            .SetAction(Resource.String.action_settings, v =>
+                            {
+                                Intent intent1;
+                                intent1 = new Intent(appActivity, typeof(SettingsActivity));
+                                intent1.PutExtra(PreferenceActivity.ExtraShowFragment,
+                                    typeof(SettingsActivity.ScannerPreferenceFragment).Name);
+                                intent1.PutExtra(PreferenceActivity.ExtraNoHeaders, true);
+                                appActivity.StartActivity(intent1);
+                            })
+                            .Show();
                     }
                     break;
                 case VALUE_PREF_SCAN_ZXING:
@@ -288,8 +287,7 @@ namespace TechStoreX
                                 Intent intent1;
                                 intent1 = new Intent(appActivity, typeof(SettingsActivity));
                                 intent1.PutExtra(PreferenceActivity.ExtraShowFragment,
-        //SettingsActivity.ScannerPreferenceFragment.class.getName()
-        "");
+                                    typeof(SettingsActivity.ScannerPreferenceFragment).Name);
                                 intent1.PutExtra(PreferenceActivity.ExtraNoHeaders, true);
                                 appActivity.StartActivity(intent1);
                             })
@@ -302,7 +300,8 @@ namespace TechStoreX
         private bool FindDataWedgePackage(Intent intent)
         {
             PackageManager pm = PackageManager;
-            IList<ResolveInfo> availableApps = pm.QueryIntentActivities(intent, PackageInfoFlags.MatchDefaultOnly);
+            IList<ResolveInfo> availableApps = pm.QueryIntentActivities(intent, 
+                PackageInfoFlags.MatchDefaultOnly);
             if (availableApps != null)
             {
                 foreach (ResolveInfo resolveInfo in availableApps)

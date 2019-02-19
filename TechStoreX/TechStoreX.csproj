@@ -72,17 +72,47 @@
     <None Include="Assets\AboutAssets.txt" />
   </ItemGroup>
   <ItemGroup>
+    <AndroidResource Include="Resources\layout\activity_detail.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\activity_login.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\layout\activity_main.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\content_main.axml">
+    <AndroidResource Include="Resources\layout\activity_results.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\layout\activity_zbar.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\activity_zxing.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\content_detail.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+        <AndroidResource Include="Resources\layout\content_login.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+        <AndroidResource Include="Resources\layout\content_main.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_info_black_24dp.xml" />
+    <AndroidResource Include="Resources\drawable\ic_save_black_24dp.xml" />
+    <AndroidResource Include="Resources\drawable\ic_settings_black_24dp.xml" />
+    <AndroidResource Include="Resources\drawable\ic_supermarket_barcode.xml" />
+    <AndroidResource Include="Resources\drawable\ic_sync_black_24dp.xml" />
     <AndroidResource Include="Resources\values\colors.xml" />
     <AndroidResource Include="Resources\values\dimens.xml" />
+    <AndroidResource Include="Resources\values\ids.xml" />
     <AndroidResource Include="Resources\values\ic_launcher_background.xml" />
     <AndroidResource Include="Resources\values\strings.xml" />
+    <AndroidResource Include="Resources\values-de\strings.xml" />
     <AndroidResource Include="Resources\values\styles.xml" />
+    <AndroidResource Include="Resources\menu\menu_detail.xml" />
+    <AndroidResource Include="Resources\menu\menu_login.xml" />
     <AndroidResource Include="Resources\menu\menu_main.xml" />
     <AndroidResource Include="Resources\mipmap-anydpi-v26\ic_launcher.xml" />
     <AndroidResource Include="Resources\mipmap-anydpi-v26\ic_launcher_round.xml" />
@@ -101,6 +131,10 @@
     <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher.png" />
     <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher_foreground.png" />
     <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher_round.png" />
+    <AndroidResource Include="Resources\xml\backup_descriptor.xml" />
+    <AndroidResource Include="Resources\xml\pref_defaults.xml" />
+    <AndroidResource Include="Resources\xml\pref_headers.xml" />
+    <AndroidResource Include="Resources\xml\pref_scanner.xml" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Android.Support.Design" Version="27.0.2.1" />
