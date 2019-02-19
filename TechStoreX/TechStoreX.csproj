@@ -60,9 +60,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppActivity.cs" />
+    <Compile Include="AppCompatPreferenceActivity.cs" />
+    <Compile Include="CameraSelectorDialogFragment.cs" />
+    <Compile Include="DetailActivity.cs" />
     <Compile Include="LoginActivity.cs" />
     <Compile Include="LogoutTimerUtility.cs" />
     <Compile Include="MainActivity.cs" />
+    <Compile Include="ResultsActivity.cs" />
+    <Compile Include="SettingsActivity.cs" />
+    <Compile Include="ZBarFormatSelectorDialogFragment.cs" />
+    <Compile Include="ZBarFullScannerActivity.cs" />
+    <Compile Include="ZXingFormatSelectorDialogFragment.cs" />
+    <Compile Include="ZXingFullScannerActivity.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
