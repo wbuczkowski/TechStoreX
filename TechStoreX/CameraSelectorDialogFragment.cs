@@ -1,22 +1,27 @@
+using Android.App;
+using Android.Hardware;
+using Android.OS;
+
+
 namespace TechStoreX
 {
-    public class CameraSelectorDialogFragment : DialogFragment
+    public class CameraSelectorDialogFragment : Android.Support.V4.App.DialogFragment
     {
-        public interface CameraSelectorDialogListener
+        public interface ICameraSelectorDialogListener
         {
             void OnCameraSelected(int cameraId);
         }
 
         private int CameraId;
-        private CameraSelectorDialogListener Listener;
+        private ICameraSelectorDialogListener Listener;
 
-        public void OnCreate(Bundle state)
+        public override void OnCreate(Bundle state)
         {
             base.OnCreate(state);
-            SetRetainInstance(true);
+            RetainInstance = true;
         }
 
-        public static CameraSelectorDialogFragment NewInstance(CameraSelectorDialogListener listener, int cameraId)
+        public static CameraSelectorDialogFragment NewInstance(ICameraSelectorDialogListener listener, int cameraId)
         {
             CameraSelectorDialogFragment fragment = new CameraSelectorDialogFragment();
             fragment.CameraId = cameraId;
@@ -32,7 +37,7 @@ namespace TechStoreX
                 return null;
             }
 
-            int numberOfCameras = Camera.GetNumberOfCameras();
+            int numberOfCameras = Camera.NumberOfCameras;
             string[] cameraNames = new string[numberOfCameras];
             int checkedIndex = 0;
 
@@ -40,11 +45,11 @@ namespace TechStoreX
             {
                 Camera.CameraInfo info = new Camera.CameraInfo();
                 Camera.GetCameraInfo(i, info);
-                if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT)
+                if (info.Facing == Camera.CameraInfo.CameraFacingFront)
                 {
                     cameraNames[i] = "Front Facing";
                 }
-                else if (info.facing == Camera.CameraInfo.CAMERA_FACING_BACK)
+                else if (info.Facing == Camera.CameraInfo.CameraFacingBack)
                 {
                     cameraNames[i] = "Rear Facing";
                 }
@@ -58,7 +63,7 @@ namespace TechStoreX
                 }
             }
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(GetActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder(Activity);
             // Set the dialog title
             builder.SetTitle(Resource.String.select_camera)
                 // Specify the list array, the items to be selected by default (null for none),
@@ -66,9 +71,9 @@ namespace TechStoreX
                 .SetSingleChoiceItems(cameraNames, checkedIndex,
                     (sender, args) => { CameraId = (int)args.Which; })
                 // Set the action buttons
-                .SetPositiveButton(Android.Resource.String.ok,
+                .SetPositiveButton(Android.Resource.String.Ok,
                     (sender, args) => { if (Listener != null) Listener.OnCameraSelected(CameraId); })
-                .SetNegativeButton(Android.Resource.String.cancel,
+                .SetNegativeButton(Android.Resource.String.Cancel,
                     (sender, args) => { });
             return builder.Create();
         }

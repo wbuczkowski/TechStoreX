@@ -1,19 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
+using System.Text.RegularExpressions;
 using Android.App;
 using Android.Content;
+using Android.Content.PM;
 using Android.OS;
-using Android.Runtime;
+using Android.Preferences;
+using Android.Support.Design.Widget;
 using Android.Views;
 using Android.Widget;
 
 namespace TechStoreX
 {
     [Activity(Label = "@string/app_name", MainLauncher = true)]
-    public class LoginActivity : Activity
+    public class LoginActivity : AppActivity
     {
         private const string KEY_PREF_ENABLE_DATAWEDGE = "pref_enable_datawedge";
         private const string KEY_PREF_USE_DATAWEDGE = "pref_use_datawedge";
@@ -28,10 +30,10 @@ namespace TechStoreX
             FloatingActionButton fab = FindViewById<FloatingActionButton>(Resource.Id.fab);
             //fab.SetOnClickListener(fabListener);
             fab.Click += FabOnClick;
-            Button buttonLogin = FindViewById(Resource.Id.buttonLogin);
+            Button buttonLogin = FindViewById<Button>(Resource.Id.buttonLogin);
             buttonLogin.Click += (sender, args) =>
             {
-                EditText editText = findViewById(Resource.Id.editUserName);
+                EditText editText = FindViewById<EditText>(Resource.Id.editUserName);
                 string data = editText.Text;
                 if (Regex.IsMatch(data, "[a-zA-Z]{3}.*"))
                 {
@@ -39,7 +41,7 @@ namespace TechStoreX
                     if (data == EXIT_STRING)
                     {
                         FinishAffinity();
-                        System.Exit(0);
+                        System.Environment.Exit(0);
                     }
                     Intent intent = new Intent(editText.Context, typeof(MainActivity));
                     intent.PutExtra(Intent.ExtraText, data);
@@ -55,15 +57,15 @@ namespace TechStoreX
             InitDataWedge();
             InitCamera();
             // clear the saved data
-            SharedPreferences sharedPref = getPreferences(MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putString(EXTRA_WORK_ORDER, "");
-            editor.putString(EXTRA_COST_CENTER, "");
-            editor.putString(EXTRA_INVENTORY, "");
-            editor.putString(EXTRA_PLANT, "");
-            editor.putString(EXTRA_STORAGE_LOCATION, "");
-            editor.putString(EXTRA_VENDOR, "");
-            editor.apply();
+            ISharedPreferences sharedPref = GetPreferences(FileCreationMode.Private);
+            ISharedPreferencesEditor editor = sharedPref.Edit();
+            editor.PutString(EXTRA_WORK_ORDER, "");
+            editor.PutString(EXTRA_COST_CENTER, "");
+            editor.PutString(EXTRA_INVENTORY, "");
+            editor.PutString(EXTRA_PLANT, "");
+            editor.PutString(EXTRA_STORAGE_LOCATION, "");
+            editor.PutString(EXTRA_VENDOR, "");
+            editor.Apply();
             // // ATTENTION: This was auto-generated to handle app links.
             // Intent appLinkIntent = getIntent();
             // String appLinkAction = appLinkIntent.getAction();
@@ -83,14 +85,14 @@ namespace TechStoreX
             return true;
         }
 
-        public override void ProcessBarcode(string data)
+        protected override void ProcessBarcode(string data)
         {
             if (Regex.IsMatch(data, "[a-zA-Z]{3}.*"))
             {
                 if (data == EXIT_STRING)
                 {
                     FinishAffinity();
-                    System.Exit(0);
+                    System.Environment.Exit(0);
                 }
                 // first three characters are letters
                 Intent intent = new Intent(this, typeof(MainActivity));
@@ -105,29 +107,29 @@ namespace TechStoreX
             }
         }
 
-        private void initCamera()
+        private void InitCamera()
         {
-            if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA))
+            if (PackageManager.HasSystemFeature(PackageManager.FeatureCamera))
             {
                 // this device has a camera
-                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putBoolean(KEY_PREF_ENABLE_CAMERA, true);
+                ISharedPreferences sharedPref = PreferenceManager.GetDefaultSharedPreferences(this);
+                ISharedPreferencesEditor editor = sharedPref.Edit();
+                editor.PutBoolean(KEY_PREF_ENABLE_CAMERA, true);
                 //            editor.putBoolean(KEY_PREF_USE_CAMERA, false);
-                editor.apply();
+                editor.Apply();
             }
             else
             {
                 // no camera on this device
-                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putBoolean(KEY_PREF_ENABLE_CAMERA, false);
-                editor.putBoolean(KEY_PREF_USE_CAMERA, false);
-                editor.apply();
+                ISharedPreferences sharedPref = PreferenceManager.GetDefaultSharedPreferences(this);
+                ISharedPreferencesEditor editor = sharedPref.Edit();
+                editor.PutBoolean(KEY_PREF_ENABLE_CAMERA, false);
+                editor.PutBoolean(KEY_PREF_USE_CAMERA, false);
+                editor.Apply();
             }
         }
 
-        private void initDataWedge()
+        private void InitDataWedge()
         {
             //All the DataWedge version does not support creating the profile using the DataWedge intent API.
             //To avoid crashes on the device, make sure to check the DtaaWedge version before creating the profile.
@@ -139,11 +141,11 @@ namespace TechStoreX
             // Then we can send CartScan profile via intent
             try
             {
-                PackageInfo pInfo = getPackageManager().getPackageInfo(DW_PKG_NAME, PackageManager.GET_META_DATA);
-                String versionCurrent = pInfo.versionName;
+                PackageInfo pInfo = PackageManager.GetPackageInfo(DW_PKG_NAME, PackageInfoFlags.MetaData);
+                string versionCurrent = pInfo.VersionName;
                 //            Log.i(TAG, "createProfileInDW: versionCurrent=" + versionCurrent);
                 if (versionCurrent != null)
-                    result = compareVersion(versionCurrent, DW_INTENT_SUPPORT_VERSION);
+                    result = CompareVersion(versionCurrent, DW_INTENT_SUPPORT_VERSION);
                 //            Log.i(TAG, "onCreate: result=" + result);
             }
             catch (PackageManager.NameNotFoundException e1)
@@ -152,88 +154,88 @@ namespace TechStoreX
             }
             if (result >= 0)
             {
-                createDataWedgeProfile();
-                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putBoolean(KEY_PREF_ENABLE_DATAWEDGE, true);
+                CreateDataWedgeProfile();
+                ISharedPreferences sharedPref = PreferenceManager.GetDefaultSharedPreferences(this);
+                ISharedPreferencesEditor editor = sharedPref.Edit();
+                editor.PutBoolean(KEY_PREF_ENABLE_DATAWEDGE, true);
                 //            editor.putBoolean(KEY_PREF_USE_DATAWEDGE, true);
-                editor.apply();
+                editor.Apply();
             }
             else
             {
                 //            dataTextView.append("DataWedge version is " + versionCurrent + ", " +
                 //                    "but the current Sample is only supported with DataWedge version 6.3 or greater.");
                 // Disable DataWedge in preferences
-                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putBoolean(KEY_PREF_ENABLE_DATAWEDGE, false);
-                editor.putBoolean(KEY_PREF_USE_DATAWEDGE, false);
-                editor.apply();
+                ISharedPreferences sharedPref = PreferenceManager.GetDefaultSharedPreferences(this);
+                ISharedPreferencesEditor editor = sharedPref.Edit();
+                editor.PutBoolean(KEY_PREF_ENABLE_DATAWEDGE, false);
+                editor.PutBoolean(KEY_PREF_USE_DATAWEDGE, false);
+                editor.Apply();
             }
         }
 
-        private static int compareVersion(string v1, string v2)
+        private static int CompareVersion(string v1, string v2)
         {
-            List<String> l1 = new ArrayList<>(Arrays.asList(
-                    v1.replaceAll("\\s", "").split("\\.")));
-            List<String> l2 = new ArrayList<>(Arrays.asList(
-                    v2.replaceAll("\\s", "").split("\\.")));
+            List<string> l1 = Regex.Matches(Regex.Replace(v1, "\\s", ""), "\\.")
+                .Cast<Match>().Select(match => match.Value).ToList();
+            List<string> l2 = Regex.Matches(Regex.Replace(v2, "\\s", ""), "\\.")
+                .Cast<Match>().Select(match => match.Value).ToList();
             int i = 0;
-            while (i < l1.size() && i < l2.size() && l1.get(i).equals(l2.get(i)))
+            while (i < l1.Count && i < l2.Count && l1[i] == l2[i])
             {
                 i++;
             }
-            if (i < l1.size() && i < l2.size())
+            if (i < l1.Count && i < l2.Count)
             {
-                int diff = Integer.valueOf(l1.get(i)).compareTo(Integer.valueOf(l2.get(i)));
-                return Integer.signum(diff);
+                int diff = Int32.Parse(l1[i]) - (Int32.Parse(l2[i]));
+                return Math.Sign(diff);
             }
             else
             {
-                return Integer.signum(l1.size() - l2.size());
+                return Math.Sign(l1.Count - l2.Count);
             }
         }
 
-        private void createDataWedgeProfile()
+        private void CreateDataWedgeProfile()
         {
             //Create profile if doesn't exit and update the required settings
             const string ACTION = "com.symbol.datawedge.api.ACTION";
             const string SET_CONFIG = "com.symbol.datawedge.api.SET_CONFIG";
             //        final String CREATE_PROFILE = "com.symbol.datawedge.api.CREATE_PROFILE";
             //        final String SWITCH = "com.symbol.datawedge.api.SWITCH_TO_PROFILE";
-            string packageName = getPackageName();
-            string profileName = getString(Resource.String.app_name) + "App";
+            string packageName = PackageName;
+            string profileName = GetString(Resource.String.app_name) + "App";
             {
                 Bundle bConfig = new Bundle();
                 Bundle bParams = new Bundle();
                 Bundle configBundle = new Bundle();
                 Bundle bundleApp1 = new Bundle();
 
-                bParams.putString("scanner_selection", "auto");
-                bParams.putString("intent_output_enabled", "true");
-                bParams.putString("intent_action", packageName + ".SCAN");
-                bParams.putString("intent_category", Intent.CATEGORY_DEFAULT);
-                bParams.putString("intent_delivery", "2");
+                bParams.PutString("scanner_selection", "auto");
+                bParams.PutString("intent_output_enabled", "true");
+                bParams.PutString("intent_action", packageName + ".SCAN");
+                bParams.PutString("intent_category", Intent.CategoryDefault);
+                bParams.PutString("intent_delivery", "2");
 
-                configBundle.putString("PROFILE_NAME", profileName);
-                configBundle.putString("PROFILE_ENABLED", "true");
-                configBundle.putString("CONFIG_MODE", "CREATE_IF_NOT_EXIST");
+                configBundle.PutString("PROFILE_NAME", profileName);
+                configBundle.PutString("PROFILE_ENABLED", "true");
+                configBundle.PutString("CONFIG_MODE", "CREATE_IF_NOT_EXIST");
 
-                bundleApp1.putString("PACKAGE_NAME", packageName);
-                bundleApp1.putStringArray("ACTIVITY_LIST", new String[] { packageName + ".SCAN" });
+                bundleApp1.PutString("PACKAGE_NAME", packageName);
+                bundleApp1.PutStringArray("ACTIVITY_LIST", new String[] { packageName + ".SCAN" });
 
-                configBundle.putParcelableArray("APP_LIST", new Bundle[] { bundleApp1 });
+                configBundle.PutParcelableArray("APP_LIST", new Bundle[] { bundleApp1 });
 
-                bConfig.putString("PLUGIN_NAME", "INTENT");
-                bConfig.putString("RESET_CONFIG", "false");
+                bConfig.PutString("PLUGIN_NAME", "INTENT");
+                bConfig.PutString("RESET_CONFIG", "false");
 
-                bConfig.putBundle("PARAM_LIST", bParams);
-                configBundle.putBundle("PLUGIN_CONFIG", bConfig);
+                bConfig.PutBundle("PARAM_LIST", bParams);
+                configBundle.PutBundle("PLUGIN_CONFIG", bConfig);
 
                 Intent i = new Intent();
-                i.setAction(ACTION);
-                i.putExtra(SET_CONFIG, configBundle);
-                this.sendBroadcast(i);
+                i.SetAction(ACTION);
+                i.PutExtra(SET_CONFIG, configBundle);
+                this.SendBroadcast(i);
             }
 
             //TO recieve the scanned via intent, the keystroke must disabled.
@@ -242,22 +244,22 @@ namespace TechStoreX
                 Bundle bParams = new Bundle();
                 Bundle configBundle = new Bundle();
 
-                bParams.putString("keystroke_output_enabled", "false");
+                bParams.PutString("keystroke_output_enabled", "false");
 
-                configBundle.putString("PROFILE_NAME", profileName);
-                configBundle.putString("PROFILE_ENABLED", "true");
-                configBundle.putString("CONFIG_MODE", "UPDATE");
+                configBundle.PutString("PROFILE_NAME", profileName);
+                configBundle.PutString("PROFILE_ENABLED", "true");
+                configBundle.PutString("CONFIG_MODE", "UPDATE");
 
-                bConfig.putString("PLUGIN_NAME", "KEYSTROKE");
-                bConfig.putString("RESET_CONFIG", "false");
+                bConfig.PutString("PLUGIN_NAME", "KEYSTROKE");
+                bConfig.PutString("RESET_CONFIG", "false");
 
-                bConfig.putBundle("PARAM_LIST", bParams);
-                configBundle.putBundle("PLUGIN_CONFIG", bConfig);
+                bConfig.PutBundle("PARAM_LIST", bParams);
+                configBundle.PutBundle("PLUGIN_CONFIG", bConfig);
 
                 Intent i = new Intent();
-                i.setAction(ACTION);
-                i.putExtra(SET_CONFIG, configBundle);
-                this.sendBroadcast(i);
+                i.SetAction(ACTION);
+                i.PutExtra(SET_CONFIG, configBundle);
+                this.SendBroadcast(i);
             }
         }
     }

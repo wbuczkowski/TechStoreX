@@ -12,41 +12,41 @@ namespace TechStoreX
 {
     public abstract class AppActivity : AppCompatActivity, LogoutTimerUtility.ILogOutListener
     {
-        const String EXTRA_OPTION = "OPTION";
-        const String EXTRA_WORK_ORDER = "WORK_ORDER";
-        const String EXTRA_COST_CENTER = "COST_CENTER";
-        const String EXTRA_MATERIAL = "MATERIAL";
-        const String EXTRA_PLANT = "PLANT";
-        const String EXTRA_STORAGE_LOCATION = "STORAGE_LOCATION";
-        const String EXTRA_BIN = "BIN";
-        const String EXTRA_QUANTITY = "QUANTITY";
-        const String EXTRA_DATE = "DATE";
-        const String EXTRA_INVENTORY = "INVENTORY";
-        const String EXTRA_VENDOR = "VENDOR";
+        protected const string EXTRA_OPTION = "OPTION";
+        protected const string EXTRA_WORK_ORDER = "WORK_ORDER";
+        protected const string EXTRA_COST_CENTER = "COST_CENTER";
+        protected const string EXTRA_MATERIAL = "MATERIAL";
+        protected const string EXTRA_PLANT = "PLANT";
+        protected const string EXTRA_STORAGE_LOCATION = "STORAGE_LOCATION";
+        protected const string EXTRA_BIN = "BIN";
+        protected const string EXTRA_QUANTITY = "QUANTITY";
+        protected const string EXTRA_DATE = "DATE";
+        protected const string EXTRA_INVENTORY = "INVENTORY";
+        protected const string EXTRA_VENDOR = "VENDOR";
 
-        const String OPTION_GOODS_ISSUE = "1";
-        const String OPTION_GOODS_RETURN = "2";
-        const String OPTION_INVENTORY_WITH_DOCUMENT = "4";
-        const String OPTION_INVENTORY_WO_DOCUMENT = "3";
+        protected const string OPTION_GOODS_ISSUE = "1";
+        protected const string OPTION_GOODS_RETURN = "2";
+        protected const string OPTION_INVENTORY_WITH_DOCUMENT = "4";
+        protected const string OPTION_INVENTORY_WO_DOCUMENT = "3";
 
-        private const String ACTION = "com.symbol.datawedge.api.ACTION";
-        private const String SOFT_SCAN_TRIGGER = "com.symbol.datawedge.api.SOFT_SCAN_TRIGGER";
-        private const String START_SCANNING = "START_SCANNING";
+        private const string ACTION = "com.symbol.datawedge.api.ACTION";
+        private const string SOFT_SCAN_TRIGGER = "com.symbol.datawedge.api.SOFT_SCAN_TRIGGER";
+        private const string START_SCANNING = "START_SCANNING";
 
         private const int RC_BARCODE_CAPTURE_ZBAR_LIB = 9001;
         private const int RC_BARCODE_CAPTURE_ZXING_LIB = 9002;
 
-        private const String KEY_PREF_TIMEOUT = "pref_timeout";
+        private const string KEY_PREF_TIMEOUT = "pref_timeout";
 
-        private const String VALUE_PREF_TIMEOUT_DEFAULT = "300000";
+        private const string VALUE_PREF_TIMEOUT_DEFAULT = "300000";
 
-        private const String KEY_PREF_SCAN_TECHNOLOGY = "pref_scan_technology";
+        private const string KEY_PREF_SCAN_TECHNOLOGY = "pref_scan_technology";
 
-        private const String VALUE_PREF_SCAN_NONE = "";
-        private const String VALUE_PREF_SCAN_DATAWEDGE = "DataWedge";
-        private const String VALUE_PREF_SCAN_ZXING = "ZXing";
-        private const String VALUE_PREF_SCAN_ZBAR_LIB = "ZBarLib";
-        private const String VALUE_PREF_SCAN_ZXING_LIB = "ZXingLib";
+        private const string VALUE_PREF_SCAN_NONE = "";
+        private const string VALUE_PREF_SCAN_DATAWEDGE = "DataWedge";
+        private const string VALUE_PREF_SCAN_ZXING = "ZXing";
+        private const string VALUE_PREF_SCAN_ZBAR_LIB = "ZBarLib";
+        private const string VALUE_PREF_SCAN_ZXING_LIB = "ZXingLib";
 
         private int logoutTime = 300000;
 
@@ -189,7 +189,7 @@ namespace TechStoreX
                             Snackbar.LengthLong).Show();
                     }
                     break;
-                case IntentIntegrator.REQUEST_CODE:
+ /*               case IntentIntegrator.REQUEST_CODE:
                     //ZXing
                     if (resultCode == Result.Ok)
                     {
@@ -220,7 +220,7 @@ namespace TechStoreX
                         Snackbar.Make(FindViewById(Resource.Id.fab), Resource.String.barcode_error,
                                 Snackbar.LengthLong).Show();
                     }
-                    break;
+                    break;*/
                 default:
                     base.OnActivityResult(requestCode, resultCode, intent);
                     break;
@@ -260,10 +260,10 @@ namespace TechStoreX
                             .Show();
                     }
                     break;
-                case VALUE_PREF_SCAN_ZXING:
-                    IntentIntegrator scanIntegrator = new IntentIntegrator(appActivity);
-                    scanIntegrator.initiateScan();
-                    break;
+                //case VALUE_PREF_SCAN_ZXING:
+                //    IntentIntegrator scanIntegrator = new IntentIntegrator(appActivity);
+                //    scanIntegrator.initiateScan();
+                //    break;
                 //                case VALUE_PREF_SCAN_GOOGLEVISION:
                 //                    // launch barcode capture activity
                 //                    intent = new Intent(AppActivity.this, BarcodeCaptureActivity.class);
