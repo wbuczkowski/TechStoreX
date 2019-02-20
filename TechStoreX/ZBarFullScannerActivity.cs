@@ -127,7 +127,7 @@ namespace TechStoreX
                     {
                         item.SetTitle(Resource.String.flash_off);
                     }
-                    ScannerView.Flash =Flash;
+                    ScannerView.Flash = Flash;
                     return true;
                 case Resource.Id.menu_auto_focus:
                     AutoFocus = !AutoFocus;
@@ -177,7 +177,7 @@ namespace TechStoreX
         {
             CameraId = cameraId;
             ScannerView.StartCamera(CameraId);
-            ScannerView.Flash=Flash;
+            ScannerView.Flash = Flash;
             ScannerView.SetAutoFocus(AutoFocus);
         }
 

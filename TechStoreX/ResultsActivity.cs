@@ -1,119 +1,114 @@
-package com.nestle.tp.techstore;
+using Android.App;
+using Android.OS;
+using Android.Support.V4.Content;
+using Android.Widget;
+using System.Collections.Generic;
 
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Environment;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
-import android.view.ViewTreeObserver;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
+namespace TechStoreX
+{
+    [Activity(Label = "@string/title_activity_results")]
+    public class ResultsActivity : AppActivity
+    {
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
+        protected override void OnCreate(Bundle savedInstanceState)
+        {
+            base.OnCreate(savedInstanceState);
+            SetContentView(Resource.Layout.activity_results);
+            Android.Support.V7.App.ActionBar actionBar = SupportActionBar;
+            if (actionBar != null) actionBar.SetDisplayHomeAsUpEnabled(true);
 
-public class ResultsActivity extends AppActivity {
+            TableLayout tl = FindViewById<TableLayout>(Resource.Id.tablelayout_contents);
+            TableRow tr;
+            TextView tv;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_results);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) actionBar.setDisplayHomeAsUpEnabled(true);
+            List<string[]> data = ReadData();
+            foreach (string[] row in data)
+            {
+                tr = new TableRow(this);
+                foreach (string cell in row)
+                {
+                    tv = new TextView(this);
+                    tv.Background = ContextCompat.GetDrawable(this, Android.Resource.Drawable.EditBoxBackground);
+                    tv.Text = cell;
+                    tr.AddView(tv);
 
-        final TableLayout tl = findViewById(R.id.tablelayout_contents);
-        TableRow tr;
-        TextView tv;
+                }
+                tl.AddView(tr);
+            }
 
-        ArrayList<String[]> data = readData();
-        for (String[] row : data) {
-            tr = new TableRow(this);
-            for (String cell : row) {
+            string[] header = Resources.GetStringArray(Resource.Array.results_headers);
+            tr = FindViewById<TableRow>(Resource.Id.tablerow_header);
+            foreach (string cell in header)
+            {
                 tv = new TextView(this);
-                tv.setBackground(ContextCompat.getDrawable(this, android.R.drawable.editbox_background));
-                tv.setText(cell);
-                tr.addView(tv);
-
+                tv.Background = ContextCompat.GetDrawable(this, Android.Resource.Drawable.EditBoxBackground);
+                tv.Text = cell;
+                tr.AddView(tv);
             }
-            tl.addView(tr);
+            // TODO
+            //    tl.ViewTreeObserver.AddOnGlobalLayoutListener(
+            //            new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            //            @Override
+            //                public void onGlobalLayout() {
+            //        if (tl.getChildCount() > 0) {
+            //            TableRow tr = (TableRow)tl.getChildAt(0);
+            //            TableRow trH = findViewById(R.id.tablerow_header);
+            //            TextView tv, tvH;
+            //            for (int j = 0; j < tr.getChildCount(); j++) {
+            //                tv = (TextView)tr.getChildAt(j);
+            //                tvH = (TextView)trH.getChildAt(j);
+            //                tvH.setWidth(tv.getWidth());
+            //            }
+            //        }
+            //    }
+            //});
         }
 
-        String[] header = getResources().getStringArray(R.array.results_headers);
-        tr = findViewById(R.id.tablerow_header);
-        for (String cell : header) {
-            tv = new TextView(this);
-            tv.setBackground(ContextCompat.getDrawable(this, android.R.drawable.editbox_background));
-            tv.setText(cell);
-            tr.addView(tv);
+        protected override void ProcessBarcode(string data)
+        {
+            // dummy
         }
 
-        tl.getViewTreeObserver().addOnGlobalLayoutListener(
-                new ViewTreeObserver.OnGlobalLayoutListener() {
+        private List<string[]> ReadData()
+        {
+            List<string[]> data = new List<string[]>();
+            //string state = Environment.getExternalStorageState();
+            //if (Environment.MEDIA_MOUNTED.equals(state)) {
+            //    File file = (Build.VERSION.SDK_INT >= 19) ?
+            //            new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),
+            //                    getString(R.string.app_name)
+            //                            + "/" + getString(R.string.file_name)) :
+            //            new File(Environment.getExternalStorageDirectory(),
+            //                    "Documents/" + getString(R.string.app_name)
+            //                            + "/" + getString(R.string.file_name));
+            //    FileReader fr = null;
+            //    BufferedReader br = null;
+            //    String line;
+            //    try {
+            //        fr = new FileReader(file);
+            //        br = new BufferedReader(fr);
 
-                    @Override
-                    public void onGlobalLayout() {
-                        if (tl.getChildCount() > 0) {
-                            TableRow tr = (TableRow) tl.getChildAt(0);
-                            TableRow trH = findViewById(R.id.tablerow_header);
-                            TextView tv, tvH;
-                            for (int j = 0; j < tr.getChildCount(); j++) {
-                                tv = (TextView) tr.getChildAt(j);
-                                tvH = (TextView) trH.getChildAt(j);
-                                tvH.setWidth(tv.getWidth());
-                            }
-                        }
-                    }
-                });
-    }
+            //        while ((line = br.readLine()) != null) {
+            //            // use tab as separator
+            //            String[] row = line.split("\t");
+            //            data.add(row);
+            //        }
 
-    @Override
-    public void processBarcode(String data) {
-        // dummy
-    }
-
-    private ArrayList<String[]> readData() {
-        ArrayList<String[]> data = new ArrayList<>();
-        String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            File file = (Build.VERSION.SDK_INT >= 19) ?
-                    new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),
-                            getString(R.string.app_name)
-                                    + "/" + getString(R.string.file_name)) :
-                    new File(Environment.getExternalStorageDirectory(),
-                            "Documents/" + getString(R.string.app_name)
-                                    + "/" + getString(R.string.file_name));
-            FileReader fr = null;
-            BufferedReader br = null;
-            String line;
-            try {
-                fr = new FileReader(file);
-                br = new BufferedReader(fr);
-
-                while ((line = br.readLine()) != null) {
-                    // use tab as separator
-                    String[] row = line.split("\t");
-                    data.add(row);
-                }
-
-            } catch (FileNotFoundException e) {
-                Snackbar.make(findViewById(R.id.fab), e.getMessage(), Snackbar.LENGTH_LONG).show();
-            } catch (IOException e) {
-                Snackbar.make(findViewById(R.id.fab), e.getMessage(), Snackbar.LENGTH_LONG).show();
-            } finally {
-                try {
-                    if (br != null) br.close();
-                    if (fr != null) fr.close();
-                } catch (IOException e) {
-                    Snackbar.make(findViewById(R.id.fab), e.getMessage(), Snackbar.LENGTH_LONG).show();
-                }
-            }
+            //    } catch (FileNotFoundException e) {
+            //        Snackbar.make(findViewById(R.id.fab), e.getMessage(), Snackbar.LENGTH_LONG).show();
+            //    } catch (IOException e) {
+            //        Snackbar.make(findViewById(R.id.fab), e.getMessage(), Snackbar.LENGTH_LONG).show();
+            //    } finally {
+            //        try {
+            //            if (br != null) br.close();
+            //            if (fr != null) fr.close();
+            //        } catch (IOException e) {
+            //            Snackbar.make(findViewById(R.id.fab), e.getMessage(), Snackbar.LENGTH_LONG).show();
+            //        }
+            //    }
+            //}
+            return data;
         }
-        return data;
     }
 }

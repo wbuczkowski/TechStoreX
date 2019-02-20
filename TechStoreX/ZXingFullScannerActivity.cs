@@ -1,9 +1,20 @@
+using Android.App;
+using Android.OS;
+using Android.Views;
+using Java.Lang;
+using ME.Dm7.Barcodescanner.Zxing;
+using System.Collections.Generic;
+using Android.Content;
+using FragmentManager = Android.Support.V4.App.FragmentManager;
+using DialogFragment = Android.Support.V4.App.DialogFragment;
+using Google.ZXing;
+
 namespace TechStoreX
 {
     [Activity(Label = "@string/title_activity_zxing")]
-    public class ZXingFullScannerActivity : AppActivity, ZXingScannerView.ResultHandler,
-        ZXingFormatSelectorDialogFragment.FormatSelectorDialogListener,
-        CameraSelectorDialogFragment.CameraSelectorDialogListener
+    public class ZXingFullScannerActivity : AppActivity, ZXingScannerView.IResultHandler,
+        ZXingFormatSelectorDialogFragment.IFormatSelectorDialogListener,
+        CameraSelectorDialogFragment.ICameraSelectorDialogListener
     {
         private const string FLASH_STATE = "FLASH_STATE";
         private const string AUTO_FOCUS_STATE = "AUTO_FOCUS_STATE";
@@ -12,7 +23,7 @@ namespace TechStoreX
         private ZXingScannerView ScannerView;
         private bool Flash;
         private bool AutoFocus;
-        private ArrayList<int> SelectedIndices;
+        private IList<Integer> SelectedIndices;
         private int CameraId = -1;
 
         protected override void OnCreate(Bundle savedInstanceState)
@@ -35,31 +46,31 @@ namespace TechStoreX
             SetContentView(Resource.Layout.activity_zxing);
             //        Toolbar toolbar = findViewById(R.id.toolbar);
             //        setSupportActionBar(toolbar);
-            ActionBar actionBar = GetSupportActionBar();
+            Android.Support.V7.App.ActionBar actionBar = SupportActionBar;
             if (actionBar != null) actionBar.SetDisplayHomeAsUpEnabled(true);
-            ViewGroup contentFrame = FindViewById(Resource.Id.content_frame);
+            ViewGroup contentFrame = FindViewById<ViewGroup>(Resource.Id.content_frame);
             ScannerView = new ZXingScannerView(this);
             SetupFormats();
             contentFrame.AddView(ScannerView);
         }
 
-        public override void OnPause()
+        protected override void OnPause()
         {
             base.OnPause();
             ScannerView.StopCamera();
             CloseFormatsDialog();
         }
 
-        public override void OnResume()
+        protected override void OnResume()
         {
             base.OnResume();
             ScannerView.SetResultHandler(this);
             ScannerView.StartCamera(CameraId);
-            ScannerView.SetFlash(Flash);
+            ScannerView.Flash = Flash;
             ScannerView.SetAutoFocus(AutoFocus);
         }
 
-        public override void OnSaveInstanceState(Bundle outState)
+        protected override void OnSaveInstanceState(Bundle outState)
         {
             base.OnSaveInstanceState(outState);
             outState.PutBoolean(FLASH_STATE, Flash);
@@ -68,45 +79,46 @@ namespace TechStoreX
             outState.PutInt(CAMERA_ID, CameraId);
         }
 
-        public override bool OnCreateOptionsMenu(Menu menu)
+        public override bool OnCreateOptionsMenu(IMenu menu)
         {
-            MenuItem menuItem;
+            IMenuItem menuItem;
 
             if (Flash)
             {
-                menuItem = menu.Add(Menu.NONE, Resource.Id.menu_flash, 0, Resource.String.flash_on);
+                menuItem = menu.Add(Menu.None, Resource.Id.menu_flash, 0, Resource.String.flash_on);
             }
             else
             {
-                menuItem = menu.Add(Menu.NONE, Resource.Id.menu_flash, 0, Resource.String.flash_off);
+                menuItem = menu.Add(Menu.None, Resource.Id.menu_flash, 0, Resource.String.flash_off);
             }
-            menuItem.SetShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+            menuItem.SetShowAsAction(ShowAsAction.Never);
 
             if (AutoFocus)
             {
-                menuItem = menu.Add(Menu.NONE, Resource.Id.menu_auto_focus, 0, Resource.String.auto_focus_on);
+                menuItem = menu.Add(Menu.None, Resource.Id.menu_auto_focus, 0, Resource.String.auto_focus_on);
             }
             else
             {
-                menuItem = menu.Add(Menu.NONE, Resource.Id.menu_auto_focus, 0, Resource.String.auto_focus_off);
+                menuItem = menu.Add(Menu.None, Resource.Id.menu_auto_focus, 0, Resource.String.auto_focus_off);
             }
-            menuItem.SetShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+            menuItem.SetShowAsAction(ShowAsAction.Never);
 
-            menuItem = menu.Add(Menu.NONE, Resource.Id.menu_formats, 0, Resource.String.formats);
-            menuItem.SetShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+            menuItem = menu.Add(Menu.None, Resource.Id.menu_formats, 0, Resource.String.formats);
+            menuItem.SetShowAsAction(ShowAsAction.Never);
 
-            menuItem = menu.Add(Menu.NONE, Resource.Id.menu_camera_selector, 0, Resource.String.select_camera);
-            menuItem.SetShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+            menuItem = menu.Add(Menu.None, Resource.Id.menu_camera_selector, 0, Resource.String.select_camera);
+            menuItem.SetShowAsAction(ShowAsAction.Never);
 
             return base.OnCreateOptionsMenu(menu);
         }
 
-        public override bool OnOptionsItemSelected(MenuItem item)
+        public override bool OnOptionsItemSelected(IMenuItem item)
         {
             // Handle presses on the action bar items
-            switch (item.GetItemId())
+            DialogFragment fragment;
+            switch (item.ItemId)
             {
-                case Resouce.Id.menu_flash:
+                case Resource.Id.menu_flash:
                     Flash = !Flash;
                     if (Flash)
                     {
@@ -116,7 +128,7 @@ namespace TechStoreX
                     {
                         item.SetTitle(Resource.String.flash_off);
                     }
-                    ScannerView.SetFlash(Flash);
+                    ScannerView.Flash = Flash;
                     return true;
                 case Resource.Id.menu_auto_focus:
                     AutoFocus = !AutoFocus;
@@ -128,18 +140,18 @@ namespace TechStoreX
                     {
                         item.SetTitle(Resource.String.auto_focus_off);
                     }
-                    ScannerView.setAutoFocus(AutoFocus);
+                    ScannerView.SetAutoFocus(AutoFocus);
                     return true;
                 case Resource.Id.menu_formats:
-                    DialogFragment fragment = ZXingFormatSelectorDialogFragment.newInstance(this, SelectedIndices);
-                    fragment.Show(GetSupportFragmentManager(), "format_selector");
+                    fragment = ZXingFormatSelectorDialogFragment.NewInstance(this, SelectedIndices);
+                    fragment.Show(SupportFragmentManager, "format_selector");
                     return true;
                 case Resource.Id.menu_camera_selector:
                     ScannerView.StopCamera();
-                    DialogFragment fragment = CameraSelectorDialogFragment.newInstance(this, CameraId);
-                    fragment.show(GetSupportFragmentManager(), "camera_selector");
+                    fragment = CameraSelectorDialogFragment.NewInstance(this, CameraId);
+                    fragment.Show(SupportFragmentManager, "camera_selector");
                     return true;
-                case Android.Resource.Id.home:
+                case Android.Resource.Id.Home:
                     OnBackPressed();
                     return true;
                 default:
@@ -147,12 +159,12 @@ namespace TechStoreX
             }
         }
 
-        public override void HandleResult(Result rawResult)
+        public void HandleResult(Google.ZXing.Result rawResult)
         {
             Intent data = new Intent();
-            data.PutExtra("Contents", rawResult.GetText());
-            data.PutExtra("Format", rawResult.GetBarcodeFormat().toString());
-            SetResult(RESULT_OK, data);
+            data.PutExtra("Contents", rawResult.Text);
+            data.PutExtra("Format", rawResult.BarcodeFormat.ToString());
+            SetResult(Android.App.Result.Ok, data);
             Finish();
         }
 
@@ -163,45 +175,50 @@ namespace TechStoreX
 
         private void CloseDialog(string dialogName)
         {
-            FragmentManager fragmentManager = GetSupportFragmentManager();
+            FragmentManager fragmentManager = SupportFragmentManager;
             DialogFragment fragment = (DialogFragment)fragmentManager.FindFragmentByTag(dialogName);
             if (fragment != null) fragment.Dismiss();
 
         }
 
-        public override void OnFormatsSaved(ArrayList<int> selectedIndices)
+        public void OnFormatsSaved(IList<Integer> selectedIndices)
         {
             SelectedIndices = selectedIndices;
             SetupFormats();
         }
 
-        public override void OnCameraSelected(int cameraId)
+        public void OnCameraSelected(int cameraId)
         {
             CameraId = cameraId;
             ScannerView.StartCamera(CameraId);
-            ScannerView.setFlash(Flash);
-            ScannerView.setAutoFocus(AutoFocus);
+            ScannerView.Flash = Flash;
+            ScannerView.SetAutoFocus(AutoFocus);
         }
 
         private void SetupFormats()
         {
-            List<BarcodeFormat> formats = new ArrayList<>();
-            if (SelectedIndices == null || SelectedIndices.isEmpty())
+            List<BarcodeFormat> formats = new List<BarcodeFormat>();
+            if (SelectedIndices == null)
             {
-                SelectedIndices = new ArrayList<>();
-                for (int i = 0; i < ZXingScannerView.ALL_FORMATS.size(); i++)
+                SelectedIndices = new List<Integer>();
+                for (int i = 0; i < ZXingScannerView.AllFormats.Count; i++)
                 {
-                    mSelectedIndices.Add(i);
+                    SelectedIndices.Add(Integer.ValueOf(i));
                 }
             }
             foreach (int index in SelectedIndices)
             {
-                formats.Add(ZXingScannerView.ALL_FORMATS.Get(index));
+                formats.Add(ZXingScannerView.AllFormats[index] as BarcodeFormat);
             }
             if (ScannerView != null)
             {
                 ScannerView.SetFormats(formats);
             }
+        }
+
+        protected override void ProcessBarcode(string data)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

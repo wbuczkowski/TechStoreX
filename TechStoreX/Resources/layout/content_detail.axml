@@ -46,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="8"
-            android:labelFor="@id/editWorkOrder"
+            android:labelFor="@+id/editWorkOrder"
             android:text="@string/text_work_order" />
 
 
@@ -80,7 +80,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="8"
-            android:labelFor="@id/editCostCenter"
+            android:labelFor="@+id/editCostCenter"
             android:text="@string/text_cost_center" />
 
 
@@ -113,7 +113,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="8"
-            android:labelFor="@id/editInventory"
+            android:labelFor="@+id/editInventory"
             android:text="@string/text_inventory" />
 
         <EditText
@@ -146,7 +146,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="8"
-            android:labelFor="@id/editMaterial"
+            android:labelFor="@+id/editMaterial"
             android:text="@string/text_material" />
 
         <EditText
@@ -178,7 +178,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="4"
-            android:labelFor="@id/editPlant"
+            android:labelFor="@+id/editPlant"
             android:text="@string/text_plant" />
 
         <EditText
@@ -195,7 +195,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="4"
-            android:labelFor="@id/editStorageLocation"
+            android:labelFor="@+id/editStorageLocation"
             android:text="@string/text_storage_location" />
 
         <EditText
@@ -228,7 +228,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="8"
-            android:labelFor="@id/editBin"
+            android:labelFor="@+id/editBin"
             android:text="@string/text_bin" />
 
         <EditText
@@ -260,7 +260,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="8"
-            android:labelFor="@id/editVendor"
+            android:labelFor="@+id/editVendor"
             android:text="@string/text_vendor" />
 
         <EditText
@@ -292,7 +292,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="8"
-            android:labelFor="@id/editQuantity"
+            android:labelFor="@+id/editQuantity"
             android:text="@string/text_quantity" />
 
         <EditText

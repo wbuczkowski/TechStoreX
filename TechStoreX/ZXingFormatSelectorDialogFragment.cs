@@ -1,6 +1,4 @@
 using Google.ZXing;
-using System.Collections;
-using ME.Dm7.Barcodescanner.Zxing;
 using Java.Lang;
 using System.Collections.Generic;
 using Android.OS;
@@ -45,12 +43,21 @@ namespace TechStoreX
                 return null;
             }
 
-            String[] formats = new String[ZXingScannerView.ALL_FORMATS.size()];
-            bool[] checkedIndices = new boolean[ZXingScannerView.ALL_FORMATS.size()];
+            IList<BarcodeFormat> AllFormats = new List<BarcodeFormat> {
+                BarcodeFormat.Aztec, BarcodeFormat.Codabar,
+                BarcodeFormat.Code39, BarcodeFormat.Code93,BarcodeFormat.Code128,
+                BarcodeFormat.DataMatrix, BarcodeFormat.Ean8,BarcodeFormat.Ean13,
+                BarcodeFormat.Itf, BarcodeFormat.Maxicode,BarcodeFormat.Pdf417,
+                BarcodeFormat.QrCode, BarcodeFormat.Rss14,BarcodeFormat.RssExpanded,
+                BarcodeFormat.UpcA, BarcodeFormat.UpcE,BarcodeFormat.UpcEanExtension
+            };
+
+            string[] formats = new string[AllFormats.Count];
+            bool[] checkedIndices = new bool[AllFormats.Count];
             int i = 0;
-            foreach (BarcodeFormat format in ZXingScannerView.ALL_FORMATS)
+            foreach (BarcodeFormat format in AllFormats)
             {
-                formats[i] = format.toString();
+                formats[i] = format.ToString();
                 checkedIndices[i] = SelectedIndices.Contains(Integer.ValueOf(i));
                 i++;
             }
@@ -68,7 +75,7 @@ namespace TechStoreX
                             // If the user checked the item, add it to the selected items
                             SelectedIndices.Add(Integer.ValueOf(args.Which));
                         }
-                        else if (SelectedIndices.Contains(Integer.ValueOf(args.Which))
+                        else if (SelectedIndices.Contains(Integer.ValueOf(args.Which)))
                         {
                             // Else, if the item is already in the array, remove it
                             SelectedIndices.Remove(Integer.ValueOf(args.Which));
