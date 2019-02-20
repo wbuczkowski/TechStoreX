@@ -108,21 +108,21 @@ namespace TechStoreX
 
             // overwrite with the values from intent, if provided
             data = intent.GetStringExtra(EXTRA_WORK_ORDER);
-            if (data.Length != 0) WorkOrder.Text = data;
+            if (data != null && data.Length != 0) WorkOrder.Text = data;
             data = intent.GetStringExtra(EXTRA_COST_CENTER);
-            if (data.Length != 0) CostCenter.Text = data;
+            if (data != null && data.Length != 0) CostCenter.Text = data;
             data = intent.GetStringExtra(EXTRA_MATERIAL);
-            if (data.Length != 0) Material.Text = data;
+            if (data != null && data.Length != 0) Material.Text = data;
             data = intent.GetStringExtra(EXTRA_PLANT);
-            if (data.Length != 0) Plant.Text = data;
+            if (data != null && data.Length != 0) Plant.Text = data;
             data = intent.GetStringExtra(EXTRA_STORAGE_LOCATION);
-            if (data.Length != 0) StorageLocation.Text = data;
+            if (data != null && data.Length != 0) StorageLocation.Text = data;
             data = intent.GetStringExtra(EXTRA_BIN);
-            if (data.Length != 0) Bin.Text = data;
+            if (data != null && data.Length != 0) Bin.Text = data;
             data = intent.GetStringExtra(EXTRA_INVENTORY);
-            if (data.Length != 0) Inventory.Text = data;
+            if (data != null && data.Length != 0) Inventory.Text = data;
             data = intent.GetStringExtra(EXTRA_VENDOR);
-            if (data.Length != 0) Vendor.Text = data;
+            if (data != null && data.Length != 0) Vendor.Text = data;
 
             // get defaults from preferences
             sharedPref = PreferenceManager.GetDefaultSharedPreferences(this);

@@ -153,13 +153,15 @@ namespace TechStoreX
          */
         protected override bool IsValidFragment(string fragmentName)
         {
-            return typeof(PreferenceFragment).Name == fragmentName
-                || typeof(ScannerPreferenceFragment).Name == fragmentName
-                || typeof(DefaultsPreferenceFragment).Name == fragmentName;
+            //return typeof(PreferenceFragment).Name == fragmentName
+            //    || typeof(ScannerPreferenceFragment).Name == fragmentName
+            //    || typeof(DefaultsPreferenceFragment).Name == fragmentName;
+            return true;
         }
 
         public class ScannerPreferenceFragment : PreferenceFragment
         {
+            public ScannerPreferenceFragment() { }
             public override void OnCreate(Bundle savedInstanceState)
             {
                 base.OnCreate(savedInstanceState);
@@ -181,6 +183,7 @@ namespace TechStoreX
 
         public class DefaultsPreferenceFragment : PreferenceFragment
         {
+            public DefaultsPreferenceFragment() { }
             public override void OnCreate(Bundle savedInstanceState)
             {
                 base.OnCreate(savedInstanceState);

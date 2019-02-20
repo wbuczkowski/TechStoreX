@@ -3,12 +3,12 @@
     <!-- These settings headers are only used on tablets. -->
 
     <header
-        android:fragment="com.nestle.tp.techstore.SettingsActivity$ScannerPreferenceFragment"
+        android:fragment="TechStoreX.SettingsActivity_ScannerPreferenceFragment"
         android:icon="@drawable/ic_supermarket_barcode"
         android:title="@string/pref_header_scanner" />
 
     <header
-        android:fragment="com.nestle.tp.techstore.SettingsActivity$DefaultsPreferenceFragment"
+        android:fragment="TechStoreX.SettingsActivity_DefaultsPreferenceFragment"
         android:icon="@drawable/ic_info_black_24dp"
         android:title="@string/pref_header_defaults" />
 
