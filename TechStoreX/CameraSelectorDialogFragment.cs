@@ -23,9 +23,11 @@ namespace TechStoreX
 
         public static CameraSelectorDialogFragment NewInstance(ICameraSelectorDialogListener listener, int cameraId)
         {
-            CameraSelectorDialogFragment fragment = new CameraSelectorDialogFragment();
-            fragment.CameraId = cameraId;
-            fragment.Listener = listener;
+            CameraSelectorDialogFragment fragment = new CameraSelectorDialogFragment
+            {
+                CameraId = cameraId,
+                Listener = listener
+            };
             return fragment;
         }
 

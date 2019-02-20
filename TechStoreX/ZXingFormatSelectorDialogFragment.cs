@@ -1,34 +1,38 @@
-using Xamarin.Google.ZXing;
+using Google.ZXing;
 using System.Collections;
-using ME.Dm7.Barcodescanner.Zxing.ZXingScannerView;
+using ME.Dm7.Barcodescanner.Zxing;
+using Java.Lang;
+using System.Collections.Generic;
+using Android.OS;
+using Android.App;
 
 namespace TechStoreX
 {
-    public class ZXingFormatSelectorDialogFragment : DialogFragment
+    public class ZXingFormatSelectorDialogFragment : Android.Support.V4.App.DialogFragment
     {
-        public interface FormatSelectorDialogListener
+        public interface IFormatSelectorDialogListener
         {
-            void OnFormatsSaved(ArrayList<int> selectedIndices);
+            void OnFormatsSaved(IList<Integer> selectedIndices);
         }
 
-        private ArrayList<int> mSelectedIndices;
-        private FormatSelectorDialogListener Listener;
+        private IList<Integer> SelectedIndices;
+        private IFormatSelectorDialogListener Listener;
 
-        public void OnCreate(Bundle state)
+        public override void OnCreate(Bundle state)
         {
             base.OnCreate(state);
-            SetRetainInstance(true);
+            RetainInstance=true;
         }
 
-        public static ZXingFormatSelectorDialogFragment NewInstance(FormatSelectorDialogListener listener, 
-            ArrayList<int> selectedIndices)
+        public static ZXingFormatSelectorDialogFragment NewInstance(IFormatSelectorDialogListener listener,
+            IList<Integer> selectedIndices)
         {
             ZXingFormatSelectorDialogFragment fragment = new ZXingFormatSelectorDialogFragment();
             if (selectedIndices == null)
             {
-                selectedIndices = new ArrayList<>();
+                selectedIndices = new List<Integer>();
             }
-            fragment.SelectedIndices = new ArrayList<>(selectedIndices);
+            fragment.SelectedIndices = new List<Integer>(selectedIndices);
             fragment.Listener = listener;
             return fragment;
         }
@@ -42,16 +46,16 @@ namespace TechStoreX
             }
 
             String[] formats = new String[ZXingScannerView.ALL_FORMATS.size()];
-            boolean[] checkedIndices = new boolean[ZXingScannerView.ALL_FORMATS.size()];
+            bool[] checkedIndices = new boolean[ZXingScannerView.ALL_FORMATS.size()];
             int i = 0;
             foreach (BarcodeFormat format in ZXingScannerView.ALL_FORMATS)
             {
                 formats[i] = format.toString();
-                checkedIndices[i] = SelectedIndices.Contains(i);
+                checkedIndices[i] = SelectedIndices.Contains(Integer.ValueOf(i));
                 i++;
             }
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(GetActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder(Activity);
             // Set the dialog title
             builder.SetTitle(Resource.String.choose_formats)
                 // Specify the list array, the items to be selected by default (null for none),
@@ -62,21 +66,21 @@ namespace TechStoreX
                         if ((bool)args.IsChecked)
                         {
                             // If the user checked the item, add it to the selected items
-                            SelectedIndices.Add((int)args.Which);
+                            SelectedIndices.Add(Integer.ValueOf(args.Which));
                         }
-                        else if (SelectedIndices.Contains((int)args.Which))
+                        else if (SelectedIndices.Contains(Integer.ValueOf(args.Which))
                         {
                             // Else, if the item is already in the array, remove it
-                            SelectedIndices.Remove((int)args.Which);
+                            SelectedIndices.Remove(Integer.ValueOf(args.Which));
                         }
                     })
                 // Set the action buttons
-                .SetPositiveButton(Android.Resource.String.ok,
+                .SetPositiveButton(Android.Resource.String.Ok,
                     (sender, args) =>
                     {
                         if (Listener != null) Listener.OnFormatsSaved(SelectedIndices);
                     })
-                .SetNegativeButton(Android.Resource.String.cancel, (sender, args) => { });
+                .SetNegativeButton(Android.Resource.String.Cancel, (sender, args) => { });
             return builder.Create();
         }
     }

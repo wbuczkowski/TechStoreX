@@ -152,6 +152,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\BarcodeScanner\BarcodeScanner.Core\BarcodeScanner.Core.csproj">
+      <Project>{C96494A0-C052-49D3-A072-3848E88DAA8B}</Project>
+      <Name>BarcodeScanner.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\BarcodeScanner\BarcodeScanner.ZBar\BarcodeScanner.ZBar.csproj">
       <Project>{5e93f659-2c3f-475b-899f-d1936bd41e3f}</Project>
       <Name>BarcodeScanner.ZBar</Name>
