@@ -4,6 +4,7 @@
   <string name="login_prompt">Please scan your user ID</string>
   <string name="login_error">Incorrect user ID!</string>
   <string name="title_activity_detail" translatable="false">DetailActivity</string>
+  <string name="title_activity_results">Results</string>
   <string name="title_activity_settings">Settings</string>
   <string name="title_activity_zbar">ZBar Scanner</string>
   <string name="title_activity_zxing">ZXing Scanner</string>

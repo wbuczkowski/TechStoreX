@@ -21,105 +21,6 @@ namespace TechStoreX
         }
 
         /**
-         * A preference value change listener that updates the preference's summary
-         * to reflect its new value.
-         */
-
-        private class BindPreferenceSummaryToValueListener : Preference.IOnPreferenceChangeListener
-        {
-            public IntPtr Handle => throw new NotImplementedException();
-
-            public void Dispose()
-            {
-
-            }
-
-            public bool OnPreferenceChange(Preference preference, Java.Lang.Object newValue)
-            {
-                string stringValue = newValue.ToString();
-
-                if (preference is ListPreference listPreference)
-                {
-                    // For list preferences, look up the correct display value in
-                    // the preference's 'entries' list.
-                    // ListPreference listPreference = (ListPreference)preference;
-                    int index = listPreference.FindIndexOfValue(stringValue);
-
-                    // Set the summary to reflect the new value.
-                    if (index >= 0)
-                    {
-                        preference.Summary = listPreference.GetEntries()[index];
-                    }
-                    else
-                    {
-                        preference.SetSummary(Resource.String.pref_not_selected);
-                    }
-
-                }
-                // else if (preference is RingtonePreference)
-                // {
-                //     // For ringtone preferences, look up the correct display value
-                //     // using RingtoneManager.
-                //     // if (TextUtils.isEmpty(stringValue))
-                //     if (stringValue.Length == 0)
-                //     {
-                //         // Empty values correspond to 'silent' (no ringtone).
-                //         preference.SetSummary(Resource.String.pref_ringtone_silent);
-
-                //     }
-                //     else
-                //     {
-                //         Ringtone ringtone = RingtoneManager.GetRingtone(
-                //                 preference.GetContext(), Uri.Parse(stringValue));
-
-                //         if (ringtone == null)
-                //         {
-                //             // Clear the summary if there was a lookup error.
-                //             preference.SetSummary(null);
-                //         }
-                //         else
-                //         {
-                //             // Set the summary to reflect the new ringtone display
-                //             // name.
-                //             string name = ringtone.GetTitle(preference.GetContext());
-                //             preference.SetSummary(name);
-                //         }
-                //     }
-
-                // }
-                else
-                {
-                    // validate values
-                    switch (preference.Key)
-                    {
-                        case "pref_default_plant":
-                            if (stringValue.Length != 4)
-                            {
-                                Toast.MakeText(preference.Context,
-                                        Resource.String.plant_length,
-                                        ToastLength.Short).Show();
-                                return false;
-                            }
-                            break;
-                        case "pref_default_storage_location":
-                            if (stringValue.Length != 4)
-                            {
-                                Toast.MakeText(preference.Context,
-                                        Resource.String.storage_location_length,
-                                        ToastLength.Short).Show();
-                                return false;
-                            }
-                            break;
-                    }
-                    // For all other preferences, set the summary to the value's
-                    // simple string representation.
-                    preference.Summary = stringValue;
-                }
-                return true;
-            }
-        }
-
-        /**
          * Helper method to determine if the device has an extra-large screen. For
          * example, 10" tablets are extra-large.
          */
@@ -146,12 +47,99 @@ namespace TechStoreX
         private static void BindPreferenceSummaryToValue(Preference preference)
         {
             // Set the listener to watch for value changes.
-            preference.OnPreferenceChangeListener = new BindPreferenceSummaryToValueListener();
+            preference.PreferenceChange += Preference_PreferenceChange;
+
+            //preference.OnPreferenceChangeListener = new BindPreferenceSummaryToValueListener();
 
             // Trigger the listener immediately with the preference's
             // current value.
-            preference.OnPreferenceChangeListener.OnPreferenceChange(preference,
-                PreferenceManager.GetDefaultSharedPreferences(preference.Context).GetString(preference.Key, ""));
+
+            Preference_PreferenceChange(preference, 
+                new Preference.PreferenceChangeEventArgs(true, preference, 
+                PreferenceManager.GetDefaultSharedPreferences(preference.Context).GetString(preference.Key, "")));
+            //preference.OnPreferenceChangeListener.OnPreferenceChange(preference,
+            //    PreferenceManager.GetDefaultSharedPreferences(preference.Context).GetString(preference.Key, ""));
+        }
+
+        private static void Preference_PreferenceChange(object sender, Preference.PreferenceChangeEventArgs e)
+        {
+            string stringValue = e.NewValue.ToString();
+
+            if (sender is ListPreference listPreference)
+            {
+                // For list preferences, look up the correct display value in
+                // the preference's 'entries' list.
+                // ListPreference listPreference = (ListPreference)preference;
+                int index = listPreference.FindIndexOfValue(stringValue);
+
+                // Set the summary to reflect the new value.
+                if (index >= 0)
+                {
+                    listPreference.Summary = listPreference.GetEntries()[index];
+                }
+                else
+                {
+                    listPreference.SetSummary(Resource.String.pref_not_selected);
+                }
+
+            }
+            // else if (preference is RingtonePreference)
+            // {
+            //     // For ringtone preferences, look up the correct display value
+            //     // using RingtoneManager.
+            //     // if (TextUtils.isEmpty(stringValue))
+            //     if (stringValue.Length == 0)
+            //     {
+            //         // Empty values correspond to 'silent' (no ringtone).
+            //         preference.SetSummary(Resource.String.pref_ringtone_silent);
+
+            //     }
+            //     else
+            //     {
+            //         Ringtone ringtone = RingtoneManager.GetRingtone(
+            //                 preference.GetContext(), Uri.Parse(stringValue));
+
+            //         if (ringtone == null)
+            //         {
+            //             // Clear the summary if there was a lookup error.
+            //             preference.SetSummary(null);
+            //         }
+            //         else
+            //         {
+            //             // Set the summary to reflect the new ringtone display
+            //             // name.
+            //             string name = ringtone.GetTitle(preference.GetContext());
+            //             preference.SetSummary(name);
+            //         }
+            //     }
+
+            // }
+            else if (sender is Preference preference)
+            {
+                // validate values
+                switch (preference.Key)
+                {
+                    case "pref_default_plant":
+                        if (stringValue.Length != 4)
+                        {
+                            Toast.MakeText(preference.Context,
+                                    Resource.String.plant_length,
+                                    ToastLength.Short).Show();
+                        }
+                        break;
+                    case "pref_default_storage_location":
+                        if (stringValue.Length != 4)
+                        {
+                            Toast.MakeText(preference.Context,
+                                    Resource.String.storage_location_length,
+                                    ToastLength.Short).Show();
+                        }
+                        break;
+                }
+                // For all other preferences, set the summary to the value's
+                // simple string representation.
+                preference.Summary = stringValue;
+            }
         }
 
         public override void OnBuildHeaders(IList<Header> target)
