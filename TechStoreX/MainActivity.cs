@@ -5,7 +5,8 @@ using Android.Content;
 using Android.Support.Design.Widget;
 using Android.Views;
 using Android.Widget;
-
+using System.Text.RegularExpressions;
+using System.IO;
 
 namespace TechStoreX
 {
@@ -133,6 +134,7 @@ namespace TechStoreX
                     break;
                 default:
                     base.OnActivityResult(requestCode, resultCode, intent);
+                    break;
             }
         }
         protected override void ProcessBarcode(string data)
@@ -202,7 +204,7 @@ namespace TechStoreX
                 {
                     // material number correct
                     option = OPTION_GOODS_ISSUE;
-                    if (splitData.length > 1)
+                    if (splitData.Length > 1)
                     {
                         if (Regex.IsMatch(splitData[1], "\\d{9}"))
                         {
@@ -228,7 +230,7 @@ namespace TechStoreX
                     }
                 }
             }
-            else if (splitData[0].startsWith("C"))
+            else if (splitData[0].StartsWith("C"))
             {
                 // this is a cost center
                 option = OPTION_GOODS_ISSUE;
@@ -270,90 +272,114 @@ namespace TechStoreX
 
         private void SetStatusText()
         {
-            string state = Environment.GetExternalStorageState();
-            string statusText = getString(Resource.String.text_status);
-            if (state == Environment.MEDIA_MOUNTED)
+            string statusText = GetString(Resource.String.text_status);
+            int count = 0;
+            if (Android.OS.Environment.ExternalStorageState == Android.OS.Environment.MediaMounted)
             {
-                File file = (Build.VERSION.SDK_INT >= 19) ?
-                        new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),
-                                getString(Resource.String.app_name)
-                                        + "/" + getString(Resource.String.file_name)) :
-                        new File(Environment.getExternalStorageDirectory(),
-                                "Documents/" + getString(Resource.String.app_name)
-                                        + "/" + getString(Resource.String.file_name));
-                FileInputStream fis = null;
-                BufferedInputStream bis = null;
-                int count = 0;
+                //File file = ((int)Build.VERSION.SdkInt >= 19) ?
+                //        new File(Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDocuments),
+                //                GetString(Resource.String.app_name)
+                //                        + "/" + GetString(Resource.String.file_name)) :
+                //        new File(Android.OS.Environment.ExternalStorageDirectory,
+                //                "Documents/" + GetString(Resource.String.app_name)
+                //                        + "/" + GetString(Resource.String.file_name));
+                //FileInputStream fis = null;
+                //BufferedInputStream bis = null;
+                //
+                //try
+                //{
+                //    fis = new FileInputStream(file);
+                //    bis = new BufferedInputStream(fis);
+
+                //    byte[] c = new byte[1024];
+
+                //    int readChars = bis.Read(c);
+                //    if (readChars == -1)
+                //    {
+                //        // bail out if nothing to read
+                //        statusText = statusText + "0";
+                //        Status.Text = statusText;
+                //        return;
+                //    }
+
+                //    // make it easy for the optimizer to tune this loop
+                //    while (readChars == 1024)
+                //    {
+                //        for (int i = 0; i < 1024;)
+                //        {
+                //            if (c[i++] == '\n')
+                //            {
+                //                ++count;
+                //            }
+                //        }
+                //        readChars = bis.Read(c);
+                //    }
+
+                //    // count remaining characters
+                //    while (readChars != -1)
+                //    {
+                //        // System.out.println(readChars);
+                //        for (int i = 0; i < readChars; ++i)
+                //        {
+                //            if (c[i] == '\n')
+                //            {
+                //                ++count;
+                //            }
+                //        }
+                //        readChars = bis.Read(c);
+                //    }
+                //}
+                //catch (IOException e)
+                //{
+                //    Snackbar.Make(FindViewById(Resource.Id.fab),
+                //        e.Message, Snackbar.LengthLong).Show();
+                //    statusText = statusText + "0";
+                //    Status.Text = statusText;
+                //    return;
+                //}
+                //finally
+                //{
+                //    try
+                //    {
+                //        if (bis != null) bis.Close();
+                //        if (fis != null) fis.Close();
+                //    }
+                //    catch (IOException e)
+                //    {
+                //        Snackbar.Make(FindViewById(Resource.Id.fab),
+                //            e.Message, Snackbar.LengthLong).Show();
+                //    }
+                //}
+                /*************************************************/
+                /* C# code to read file using System.IO         */
+                /*************************************************/
+                // slower!!!
+                string path = ((int)Build.VERSION.SdkInt >= 19) ?
+                    Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDocuments).AbsolutePath :
+                    Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + "/Documents";
+                path = Path.Combine(path, GetString(Resource.String.app_name));
+                path = Path.Combine(path, GetString(Resource.String.file_name));
                 try
                 {
-                    fis = new FileInputStream(file);
-                    bis = new BufferedInputStream(fis);
-
-                    byte[] c = new byte[1024];
-
-                    int readChars = bis.read(c);
-                    if (readChars == -1)
+                    using (StreamReader streamReader = new StreamReader(path))
                     {
-                        // bail out if nothing to read
-                        statusText = statusText + "0";
-                        Status.SetText(statusText);
-                        return;
-                    }
-
-                    // make it easy for the optimizer to tune this loop
-                    while (readChars == 1024)
-                    {
-                        for (int i = 0; i < 1024;)
+                        string line;
+                        while ((line = streamReader.ReadLine()) != null)
                         {
-                            if (c[i++] == '\n')
-                            {
-                                ++count;
-                            }
+                            count++;
                         }
-                        readChars = bis.read(c);
-                    }
-
-                    // count remaining characters
-                    while (readChars != -1)
-                    {
-                        // System.out.println(readChars);
-                        for (int i = 0; i < readChars; ++i)
-                        {
-                            if (c[i] == '\n')
-                            {
-                                ++count;
-                            }
-                        }
-                        readChars = bis.read(c);
                     }
                 }
-                catch (IOException e)
+                catch (Exception e)
                 {
-                    Snackbar.Make(FindViewById(Resource.Id.fab),
-                        e.GetMessage(), Snackbar.LengthLong).Show();
-                    statusText = statusText + "0";
-                    Status.SetText(statusText);
-                    return;
+                    Snackbar.Make(FindViewById(Resource.Id.fab), e.Message, Snackbar.LengthLong).Show();
                 }
-                finally
-                {
-                    try
-                    {
-                        if (bis != null) bis.close();
-                        if (fis != null) fis.close();
-                    }
-                    catch (IOException e)
-                    {
-                        Snackbar.Make(FindViewById(Resource.Id.fab),
-                            e.GetMessage(), Snackbar.LengthLong).Show();
-                    }
-                }
-                statusText = statusText + count;
-                Status.SetText(statusText);
             }
+            statusText = statusText + count;
+            Status.Text = statusText;
         }
 
-        private string prepareData(Intent intent)
+        private string PrepareData(Intent intent)
         {
             string data = intent.GetStringExtra(EXTRA_OPTION);
             // if (data == null || data.isEmpty())
@@ -404,15 +430,15 @@ namespace TechStoreX
             }
 
             // write material number etc.
-            const string[][] ii = {
-                {EXTRA_MATERIAL, "true"},
-                {EXTRA_PLANT, "true"},
-                {EXTRA_STORAGE_LOCATION, "true"},
-                {EXTRA_BIN, "false"},
-                {EXTRA_QUANTITY, "true"}
+            string[][] ii = {
+                new string[] {EXTRA_MATERIAL, "true"},
+                new string[] {EXTRA_PLANT, "true"},
+                new string[] {EXTRA_STORAGE_LOCATION, "true"},
+                new string[] {EXTRA_BIN, "false"},
+                new string[] {EXTRA_QUANTITY, "true"}
                 };
             // for (int i = 0; i<map.length;i++){
-            foreach (String[] i in ii)
+            foreach (string[] i in ii)
             {
                 data = intent.GetStringExtra(i[0]);
                 // if (data != null && !data.isEmpty())
@@ -449,7 +475,7 @@ namespace TechStoreX
             }
 
             // write inventory number, if provided
-            if (data.equals(OPTION_INVENTORY_WITH_DOCUMENT))
+            if (data == OPTION_INVENTORY_WITH_DOCUMENT)
             {
                 // write inventory document
                 data = intent.GetStringExtra(EXTRA_INVENTORY);
@@ -483,78 +509,106 @@ namespace TechStoreX
             }
 
             // success: write end of line
-            dataLine = dataLine + "\n";
+            // needed in C# ????
+            // dataLine = dataLine + "\n";
 
             return dataLine;
         }
 
         private bool WriteFile(Intent intent)
         {
-            string state = Environment.GetExternalStorageState();
-            if (state == Environment.MEDIA_MOUNTED)
+            if (Android.OS.Environment.ExternalStorageState == Android.OS.Environment.MediaMounted)
             {
-                File file = (Build.VERSION.SDK_INT >= 19) ?
-                        new File(Environment.GetExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),
-                                getString(Resource.String.app_name)) :
-                        new File(Environment.GetExternalStorageDirectory(),
-                                "Documents/" + getString(Resource.String.app_name));
+                //    File file = ((int)Build.VERSION.SdkInt >= 19) ?
+                //            new File(Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDocuments),
+                //                    GetString(Resource.String.app_name)) :
+                //            new File(Android.OS.Environment.ExternalStorageDirectory,
+                //                    "Documents/" + GetString(Resource.String.app_name));
 
-                if (!file.exists() && !file.mkdirs())
-                {
-                    Snackbar.Make(FindViewById(Resource.Id.fab),
-                        Resource.String.directory_error, Snackbar.LengthLong).Show();
-                    return false;
-                }
-                file = new File(file.getPath() + "/" + GetString(Resource.String.file_name));
-                if (!file.exists())
-                {
-                    try
-                    {
-                        if (!file.createNewFile())
-                        {
-                            Snackbar.Make(FindViewById(Resource.Id.fab),
-                                Resource.String.file_error, Snackbar.LengthLong).Show();
-                            return false;
-                        }
-                    }
-                    catch (IOException e)
-                    {
-                        Snackbar.Make(FindViewById(Resource.Id.fab),
-                            e.GetMessage(), Snackbar.LengthLong).Show();
-                        return false;
-                    }
-                }
-                BufferedWriter bw = null;
-                FileWriter fw = null;
+                //    if (!file.Exists() && !file.Mkdirs())
+                //    {
+                //        Snackbar.Make(FindViewById(Resource.Id.fab),
+                //            Resource.String.directory_error, Snackbar.LengthLong).Show();
+                //        return false;
+                //    }
+                //    file = new File(file.Path + "/" + GetString(Resource.String.file_name));
+                //    if (!file.Exists())
+                //    {
+                //        try
+                //        {
+                //            if (!file.CreateNewFile())
+                //            {
+                //                Snackbar.Make(FindViewById(Resource.Id.fab),
+                //                    Resource.String.file_error, Snackbar.LengthLong).Show();
+                //                return false;
+                //            }
+                //        }
+                //        catch (IOException e)
+                //        {
+                //            Snackbar.Make(FindViewById(Resource.Id.fab),
+                //                e.Message, Snackbar.LengthLong).Show();
+                //            return false;
+                //        }
+                //    }
+                //    BufferedWriter bw = null;
+                //    FileWriter fw = null;
 
-                String dataLine = PrepareData(intent);
+                //    string dataLine = PrepareData(intent);
 
+                //    try
+                //    {
+                //        fw = new FileWriter(file, true);
+                //        bw = new BufferedWriter(fw);
+                //        if (dataLine != null) bw.Write(dataLine);
+                //        return true;
+                //    }
+                //    catch (IOException e)
+                //    {
+                //        Snackbar.Make(FindViewById(Resource.Id.fab),
+                //            e.Message, Snackbar.LengthLong).Show();
+                //        return false;
+                //    }
+                //    finally
+                //    {
+                //        try
+                //        {
+                //            if (bw != null) bw.Close();
+                //            if (fw != null) fw.Close();
+                //        }
+                //        catch (IOException e)
+                //        {
+                //            Snackbar.Make(FindViewById(Resource.Id.fab),
+                //                e.Message, Snackbar.LengthLong).Show();
+                //        }
+                //    }
+                //}
+
+                /*************************************************/
+                /* C# code to write file using System.IO         */
+                /*************************************************/
+                string path = ((int)Build.VERSION.SdkInt >= 19) ?
+                    Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDocuments).AbsolutePath :
+                    Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + "/Documents";
+                path = Path.Combine(path, GetString(Resource.String.app_name));
                 try
                 {
-                    fw = new FileWriter(file, true);
-                    bw = new BufferedWriter(fw);
-                    if (dataLine != null) bw.write(dataLine);
-                    return true;
+                    if (!Directory.Exists(path) && !Directory.CreateDirectory(path).Exists)
+                    {
+                        Snackbar.Make(FindViewById(Resource.Id.fab), Resource.String.directory_error, Snackbar.LengthLong).Show();
+                        return false;
+                    }
+                    string file = Path.Combine(path, GetString(Resource.String.file_name));
+                    using (StreamWriter streamWriter = new StreamWriter(file, true))
+                    {
+                        streamWriter.WriteLine(PrepareData(intent));
+                    }
                 }
-                catch (IOException e)
+                catch (Exception e)
                 {
-                    Snackbar.Make(FindViewById(Reource.Id.fab),
-                        e.GetMessage(), Snackbar.LengthLong).Show();
+                    Snackbar.Make(FindViewById(Resource.Id.fab), e.Message, Snackbar.LengthLong).Show();
                     return false;
                 }
-                finally
-                {
-                    try
-                    {
-                        if (bw != null) bw.close();
-                        if (fw != null) fw.close();
-                    }
-                    catch (IOException e)
-                    {
-                        Snackbar.Make(FindViewById(Reource.Id.fab),
-                            e.GetMessage(), Snackbar.LengthLong).Show();
-                    }
-                }
+                return true;
             }
             else
             {

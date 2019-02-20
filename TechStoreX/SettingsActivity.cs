@@ -1,14 +1,22 @@
-using Android.Preference;
+using System;
+using System.Collections.Generic;
+using Android.App;
+using Android.Content;
+using Android.Content.Res;
+using Android.OS;
+using Android.Preferences;
+using Android.Views;
+using Android.Widget;
 
 namespace TechStoreX
 {
     [Activity(Label = "@string/title_activity_settings")]
-    public class SettingsActivity : AppCompatPreferenceActivity, Preference.IOnPreferenceChangeListener
+    public class SettingsActivity : AppCompatPreferenceActivity
     {
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-            ActionBar actionBar = GetSupportActionBar();
+            Android.Support.V7.App.ActionBar actionBar = GetSupportActionBar();
             if (actionBar != null) actionBar.SetDisplayHomeAsUpEnabled(true);
         }
 
@@ -16,101 +24,114 @@ namespace TechStoreX
          * A preference value change listener that updates the preference's summary
          * to reflect its new value.
          */
-        public bool OnPreferenceChange(Preference preference, Object value)
+
+        private class BindPreferenceSummaryToValueListener : Preference.IOnPreferenceChangeListener
         {
-            string stringValue = value.toString();
+            public IntPtr Handle => throw new NotImplementedException();
 
-            if (preference is ListPreference)
+            public void Dispose()
             {
-                // For list preferences, look up the correct display value in
-                // the preference's 'entries' list.
-                ListPreference listPreference = (ListPreference)preference;
-                int index = listPreference.FindIndexOfValue(stringValue);
 
-                // Set the summary to reflect the new value.
-                if (index >= 0)
+            }
+
+            public bool OnPreferenceChange(Preference preference, Java.Lang.Object newValue)
+            {
+                string stringValue = newValue.ToString();
+
+                if (preference is ListPreference listPreference)
                 {
-                    preference.SetSummary(listPreference.GetEntries()[index]);
+                    // For list preferences, look up the correct display value in
+                    // the preference's 'entries' list.
+                    // ListPreference listPreference = (ListPreference)preference;
+                    int index = listPreference.FindIndexOfValue(stringValue);
+
+                    // Set the summary to reflect the new value.
+                    if (index >= 0)
+                    {
+                        preference.Summary = listPreference.GetEntries()[index];
+                    }
+                    else
+                    {
+                        preference.SetSummary(Resource.String.pref_not_selected);
+                    }
+
                 }
+                // else if (preference is RingtonePreference)
+                // {
+                //     // For ringtone preferences, look up the correct display value
+                //     // using RingtoneManager.
+                //     // if (TextUtils.isEmpty(stringValue))
+                //     if (stringValue.Length == 0)
+                //     {
+                //         // Empty values correspond to 'silent' (no ringtone).
+                //         preference.SetSummary(Resource.String.pref_ringtone_silent);
+
+                //     }
+                //     else
+                //     {
+                //         Ringtone ringtone = RingtoneManager.GetRingtone(
+                //                 preference.GetContext(), Uri.Parse(stringValue));
+
+                //         if (ringtone == null)
+                //         {
+                //             // Clear the summary if there was a lookup error.
+                //             preference.SetSummary(null);
+                //         }
+                //         else
+                //         {
+                //             // Set the summary to reflect the new ringtone display
+                //             // name.
+                //             string name = ringtone.GetTitle(preference.GetContext());
+                //             preference.SetSummary(name);
+                //         }
+                //     }
+
+                // }
                 else
                 {
-                    preference.SetSummary(Resource.String.pref_not_selected);
+                    // validate values
+                    switch (preference.Key)
+                    {
+                        case "pref_default_plant":
+                            if (stringValue.Length != 4)
+                            {
+                                Toast.MakeText(preference.Context,
+                                        Resource.String.plant_length,
+                                        ToastLength.Short).Show();
+                                return false;
+                            }
+                            break;
+                        case "pref_default_storage_location":
+                            if (stringValue.Length != 4)
+                            {
+                                Toast.MakeText(preference.Context,
+                                        Resource.String.storage_location_length,
+                                        ToastLength.Short).Show();
+                                return false;
+                            }
+                            break;
+                    }
+                    // For all other preferences, set the summary to the value's
+                    // simple string representation.
+                    preference.Summary = stringValue;
                 }
-
+                return true;
             }
-            // else if (preference is RingtonePreference)
-            // {
-            //     // For ringtone preferences, look up the correct display value
-            //     // using RingtoneManager.
-            //     // if (TextUtils.isEmpty(stringValue))
-            //     if (stringValue.Length == 0)
-            //     {
-            //         // Empty values correspond to 'silent' (no ringtone).
-            //         preference.SetSummary(Resource.String.pref_ringtone_silent);
-
-            //     }
-            //     else
-            //     {
-            //         Ringtone ringtone = RingtoneManager.GetRingtone(
-            //                 preference.GetContext(), Uri.Parse(stringValue));
-
-            //         if (ringtone == null)
-            //         {
-            //             // Clear the summary if there was a lookup error.
-            //             preference.SetSummary(null);
-            //         }
-            //         else
-            //         {
-            //             // Set the summary to reflect the new ringtone display
-            //             // name.
-            //             string name = ringtone.GetTitle(preference.GetContext());
-            //             preference.SetSummary(name);
-            //         }
-            //     }
-
-            // }
-            else
-            {
-                // validate values
-                switch (preference.GetKey())
-                {
-                    case "pref_default_plant":
-                        if (stringValue.Length != 4)
-                        {
-                            Toast.MakeText(preference.GetContext(),
-                                    Resource.String.plant_length,
-                                    Toast.LengthShort).Show();
-                            return false;
-                        }
-                    case "pref_default_storage_location":
-                        if (stringValue.Length != 4)
-                        {
-                            Toast.MakeText(preference.GetContext(),
-                                    Resource.String.storage_location_length,
-                                    Toast.LengthShort).Show();
-                            return false;
-                        }
-                }
-                // For all other preferences, set the summary to the value's
-                // simple string representation.
-                preference.SetSummary(stringValue);
-            }
-            return true;
         }
 
         /**
          * Helper method to determine if the device has an extra-large screen. For
          * example, 10" tablets are extra-large.
          */
-        private sealed bool IsXLargeTablet(Context context)
+        private bool IsXLargeTablet(Context context)
         {
-            return (context.GetResources().GetConfiguration().screenLayout
-                    & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_XLARGE;
+            return (context.Resources.Configuration.ScreenLayout
+                    & ScreenLayout.SizeMask) >= ScreenLayout.SizeXlarge;
         }
 
-        public bool onIsMultiPane()
+        public new bool IsMultiPane()
         {
-            return isXLargeTablet(this);
+            return IsXLargeTablet(this);
         }
 
         /**
@@ -125,59 +146,57 @@ namespace TechStoreX
         private static void BindPreferenceSummaryToValue(Preference preference)
         {
             // Set the listener to watch for value changes.
-            preference.OnPreferenceChangeListener = this;
+            preference.OnPreferenceChangeListener = new BindPreferenceSummaryToValueListener();
 
             // Trigger the listener immediately with the preference's
             // current value.
-            OnPreferenceChange(preference,
-                    String.valueOf(PreferenceManager
-                            .getDefaultSharedPreferences(preference.getContext())
-                            .getString(preference.getKey(), "")));
+            preference.OnPreferenceChangeListener.OnPreferenceChange(preference,
+                PreferenceManager.GetDefaultSharedPreferences(preference.Context).GetString(preference.Key, ""));
         }
 
-        public override void OnBuildHeaders(List<Header> target)
+        public override void OnBuildHeaders(IList<Header> target)
         {
-            loadHeadersFromResource(Resource.xml.pref_headers, target);
+            LoadHeadersFromResource(Resource.Xml.pref_headers, target);
         }
 
         /**
          * This method stops fragment injection in malicious applications.
          * Make sure to deny any unknown fragments here.
          */
-        protected boolean isValidFragment(string fragmentName)
+        protected override bool IsValidFragment(string fragmentName)
         {
             return typeof(PreferenceFragment).Name == fragmentName
                 || typeof(ScannerPreferenceFragment).Name == fragmentName
                 || typeof(DefaultsPreferenceFragment).Name == fragmentName;
         }
 
-        public static class ScannerPreferenceFragment : PreferenceFragment
+        public class ScannerPreferenceFragment : PreferenceFragment
         {
             public override void OnCreate(Bundle savedInstanceState)
             {
                 base.OnCreate(savedInstanceState);
-                AddPreferencesFromResource(Resource.xml.pref_scanner);
+                AddPreferencesFromResource(Resource.Xml.pref_scanner);
                 SetHasOptionsMenu(true);
                 BindPreferenceSummaryToValue(FindPreference("pref_scan_technology"));
             }
-            public override bool OnOptionsItemSelected(MenuItem item)
+            public override bool OnOptionsItemSelected(IMenuItem item)
             {
-                int id = item.GetItemId();
-                if (id == Android.Resource.Id.home)
+                int id = item.ItemId;
+                if (id == Android.Resource.Id.Home)
                 {
-                    StartActivity(new Intent(GetActivity(), typeof(SettingsActivity)));
+                    StartActivity(new Intent(Activity, typeof(SettingsActivity)));
                     return true;
                 }
                 return base.OnOptionsItemSelected(item);
             }
         }
 
-        public static class DefaultsPreferenceFragment : PreferenceFragment
+        public class DefaultsPreferenceFragment : PreferenceFragment
         {
             public override void OnCreate(Bundle savedInstanceState)
             {
                 base.OnCreate(savedInstanceState);
-                AddPreferencesFromResource(Resource.xml.pref_defaults);
+                AddPreferencesFromResource(Resource.Xml.pref_defaults);
                 SetHasOptionsMenu(true);
 
                 // Bind the summaries of EditText/List/Dialog/Ringtone preferences
@@ -188,21 +207,21 @@ namespace TechStoreX
                 BindPreferenceSummaryToValue(FindPreference("pref_default_plant"));
                 BindPreferenceSummaryToValue(FindPreference("pref_default_storage_location"));
             }
-            public override bool OnOptionsItemSelected(MenuItem item)
+            public override bool OnOptionsItemSelected(IMenuItem item)
             {
-                int id = item.GetItemId();
-                if (id == Android.Resource.Id.home)
+                int id = item.ItemId;
+                if (id == Android.Resource.Id.Home)
                 {
-                    StartActivity(new Intent(GetActivity(), typeof(SettingsActivity)));
+                    StartActivity(new Intent(Activity, typeof(SettingsActivity)));
                     return true;
                 }
                 return base.OnOptionsItemSelected(item);
             }
         }
-        public override bool OnOptionsItemSelected(MenuItem item)
+        public override bool OnOptionsItemSelected(IMenuItem item)
         {
-            int id = item.GetItemId();
-            if (id == Android.Resource.Id.home)
+            int id = item.ItemId;
+            if (id == Android.Resource.Id.Home)
             {
                 OnBackPressed();
                 return true;

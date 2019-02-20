@@ -25,7 +25,7 @@ namespace TechStoreX
             GetDelegate().OnPostCreate(savedInstanceState);
         }
 
-        ActionBar GetSupportActionBar()
+        protected ActionBar GetSupportActionBar()
         {
             return GetDelegate().SupportActionBar;
         }
