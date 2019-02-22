@@ -357,8 +357,7 @@ namespace TechStoreX
                 string path = ((int)Build.VERSION.SdkInt >= 19) ?
                     Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDocuments).AbsolutePath :
                     Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + "/Documents";
-                path = Path.Combine(path, GetString(Resource.String.app_name));
-                path = Path.Combine(path, GetString(Resource.String.file_name));
+                path = Path.Combine(Path.Combine(path, GetString(Resource.String.app_name)), GetString(Resource.String.file_name));
                 try
                 {
                     using (StreamReader streamReader = new StreamReader(path))

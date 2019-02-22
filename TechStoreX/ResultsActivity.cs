@@ -65,14 +65,31 @@ namespace TechStoreX
             //});
         }
 
-        protected override void ProcessBarcode(string data)
-        {
-            // dummy
-        }
-
         private List<string[]> ReadData()
         {
             List<string[]> data = new List<string[]>();
+            if (Android.OS.Environment.ExternalStorageState == Android.OS.Environment.MediaMounted)
+            {
+                string path = ((int)Build.VERSION.SdkInt >= 19) ?
+                    Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDocuments).AbsolutePath :
+                    Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + "/Documents";
+                path = Path.Combine(Path.Combine(path, GetString(Resource.String.app_name)), GetString(Resource.String.file_name));
+                try
+                {
+                    using (StreamReader streamReader = new StreamReader(path))
+                    {
+                        string line;
+                        while ((line = streamReader.ReadLine()) != null)
+                        {
+                            data.Add(line.split("\t"));
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Snackbar.Make(FindViewById(Resource.Id.fab), e.Message, Snackbar.LengthLong).Show();
+                }
+            }
             //string state = Environment.getExternalStorageState();
             //if (Environment.MEDIA_MOUNTED.equals(state)) {
             //    File file = (Build.VERSION.SDK_INT >= 19) ?
@@ -109,6 +126,11 @@ namespace TechStoreX
             //    }
             //}
             return data;
+        }
+
+        protected override void ProcessBarcode(string data)
+        {
+            // dummy
         }
     }
 }
