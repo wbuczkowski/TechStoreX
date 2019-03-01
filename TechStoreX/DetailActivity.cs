@@ -30,6 +30,7 @@ namespace TechStoreX
         private EditText Quantity;
         private EditText Inventory;
         private EditText Vendor;
+        private Button Save;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -60,7 +61,9 @@ namespace TechStoreX
                         break;
                 }
             };
-
+            Save = FindViewById<Button>(Resource.Id.button_save);
+            Save.Click += (sender, args) => { OnSave(); };
+            
             // get edit text controls
             WorkOrder = FindViewById<EditText>(Resource.Id.editWorkOrder);
             CostCenter = FindViewById<EditText>(Resource.Id.editCostCenter);
@@ -157,45 +160,50 @@ namespace TechStoreX
             // as you specify a parent activity in AndroidManifest.xml.
             if (item.ItemId == Resource.Id.action_save)
             {
-                if (ValidateData())
-                {
-                    Intent data = new Intent();
-                    data.PutExtra(EXTRA_OPTION, Option);
-                    data.PutExtra(EXTRA_WORK_ORDER, WorkOrder.Text);
-                    data.PutExtra(EXTRA_COST_CENTER, CostCenter.Text);
-                    data.PutExtra(EXTRA_MATERIAL, Material.Text);
-                    data.PutExtra(EXTRA_PLANT, Plant.Text);
-                    data.PutExtra(EXTRA_STORAGE_LOCATION, StorageLocation.Text);
-                    data.PutExtra(EXTRA_BIN, Bin.Text);
-                    // TODO: manage format conversion for quantity as string
-                    data.PutExtra(EXTRA_QUANTITY, Quantity.Text);
-                    SimpleDateFormat ft = new SimpleDateFormat("dd/MM/yy HH:mm:ss", Locale.Us);
-                    data.PutExtra(EXTRA_DATE, ft.Format(new Date()));
-                    data.PutExtra(EXTRA_INVENTORY, Inventory.Text);
-                    data.PutExtra(EXTRA_VENDOR, Vendor.Text);
-                    SetResult(Result.Ok, data);
-                    // save data for next use
-                    ISharedPreferences sharedPref = GetPreferences(FileCreationMode.Private);
-                    ISharedPreferencesEditor editor = sharedPref.Edit();
-                    editor.PutString(EXTRA_WORK_ORDER, WorkOrder.Text);
-                    editor.PutString(EXTRA_COST_CENTER, CostCenter.Text);
-                    editor.PutString(EXTRA_INVENTORY, Inventory.Text);
-                    editor.PutString(EXTRA_PLANT, Plant.Text);
-                    editor.PutString(EXTRA_STORAGE_LOCATION, StorageLocation.Text);
-                    editor.PutString(EXTRA_VENDOR, Vendor.Text);
-                    editor.Apply();
-                    // finish activity
-                    Finish();
-                }
-                else
-                {
-                    Snackbar.Make(FindViewById(Resource.Id.fab),
-                            Resource.String.save_error,
-                            Snackbar.LengthLong).Show();
-                }
+                OnSave();
                 return true;
             }
             return base.OnOptionsItemSelected(item);
+        }
+
+        private void OnSave()
+        {
+            if (ValidateData())
+            {
+                Intent data = new Intent();
+                data.PutExtra(EXTRA_OPTION, Option);
+                data.PutExtra(EXTRA_WORK_ORDER, WorkOrder.Text);
+                data.PutExtra(EXTRA_COST_CENTER, CostCenter.Text);
+                data.PutExtra(EXTRA_MATERIAL, Material.Text);
+                data.PutExtra(EXTRA_PLANT, Plant.Text);
+                data.PutExtra(EXTRA_STORAGE_LOCATION, StorageLocation.Text);
+                data.PutExtra(EXTRA_BIN, Bin.Text);
+                // TODO: manage format conversion for quantity as string
+                data.PutExtra(EXTRA_QUANTITY, Quantity.Text);
+                SimpleDateFormat ft = new SimpleDateFormat("dd/MM/yy HH:mm:ss", Locale.Us);
+                data.PutExtra(EXTRA_DATE, ft.Format(new Date()));
+                data.PutExtra(EXTRA_INVENTORY, Inventory.Text);
+                data.PutExtra(EXTRA_VENDOR, Vendor.Text);
+                SetResult(Result.Ok, data);
+                // save data for next use
+                ISharedPreferences sharedPref = GetPreferences(FileCreationMode.Private);
+                ISharedPreferencesEditor editor = sharedPref.Edit();
+                editor.PutString(EXTRA_WORK_ORDER, WorkOrder.Text);
+                editor.PutString(EXTRA_COST_CENTER, CostCenter.Text);
+                editor.PutString(EXTRA_INVENTORY, Inventory.Text);
+                editor.PutString(EXTRA_PLANT, Plant.Text);
+                editor.PutString(EXTRA_STORAGE_LOCATION, StorageLocation.Text);
+                editor.PutString(EXTRA_VENDOR, Vendor.Text);
+                editor.Apply();
+                // finish activity
+                Finish();
+            }
+            else
+            {
+                Snackbar.Make(FindViewById(Resource.Id.fab),
+                    Resource.String.save_error,
+                    Snackbar.LengthLong).Show();
+            }
         }
 
         private void InitializeVisibility()
