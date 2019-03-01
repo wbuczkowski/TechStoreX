@@ -4,7 +4,7 @@
 
     <header
         android:fragment="TechStoreX.SettingsActivity_ScannerPreferenceFragment"
-        android:icon="@drawable/ic_barcode_black_24dp"
+        android:icon="@drawable/ic_barcode_grey_24dp"
         android:title="@string/pref_header_scanner" />
 
     <header
