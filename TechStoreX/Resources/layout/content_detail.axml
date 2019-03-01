@@ -29,7 +29,7 @@
             android:layout_height="40dp"
             android:layout_weight="1"
             android:contentDescription="@string/action_switch"
-            app:srcCompat="@drawable/ic_sync_black_24dp" />
+            app:srcCompat="@drawable/ic_sync_white_24dp" />
 
 
     </LinearLayout>
