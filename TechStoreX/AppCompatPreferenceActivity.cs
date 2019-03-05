@@ -4,7 +4,6 @@ using Android.Views;
 using Android.Preferences;
 using Android.Content.Res;
 using Android.Graphics;
-using Java.Lang;
 
 namespace TechStoreX
 {
@@ -61,7 +60,7 @@ namespace TechStoreX
             GetDelegate().OnPostResume();
         }
 
-        protected override void OnTitleChanged(ICharSequence title, Color color)
+        protected override void OnTitleChanged(Java.Lang.ICharSequence title, Color color)
         {
             base.OnTitleChanged(title, color);
             GetDelegate().SetTitle(title);
