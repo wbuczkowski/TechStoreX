@@ -137,6 +137,7 @@ namespace TechStoreX
                     break;
             }
         }
+        
         protected override void ProcessBarcode(string data)
         {
             string option = "", materialNumber = "",

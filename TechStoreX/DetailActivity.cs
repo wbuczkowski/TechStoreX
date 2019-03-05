@@ -63,7 +63,7 @@ namespace TechStoreX
             };
             Save = FindViewById<Button>(Resource.Id.button_save);
             Save.Click += (sender, args) => { OnSave(); };
-            
+
             // get edit text controls
             WorkOrder = FindViewById<EditText>(Resource.Id.editWorkOrder);
             CostCenter = FindViewById<EditText>(Resource.Id.editCostCenter);
@@ -580,8 +580,178 @@ namespace TechStoreX
 
         protected override void ProcessBarcode(string data)
         {
-            // TODO 
-            throw new System.NotImplementedException();
+            string[] splitData = data.split(" ");
+            bool unknown = true;
+            ViewGroup viewGroup;
+            if (Regex.IsMatch(splitData[0], "\\d+"))
+            {
+                // starts with a digit
+                switch (splitData[0].Length)
+                {
+                    case 10:
+                        // this is a work order
+                        unknown = false;
+                        if (Option == OPTION_GOODS_ISSUE || Option == OPTION_GOODS_RETURN)
+                        {
+                            // ignore work order by inventory
+                            // show work order, hide and clear cost center
+                            viewGroup = FindViewById<ViewGroup>(Resource.Id.layoutWorkOrder);
+                            if (viewGroup != null) viewGroup.Visibility = ViewStates.Visible;
+                            WorkOrder = splitData[0];
+                            //mWorkOrder.setEnabled(false);
+                            viewGroup = FindViewById<ViewGroup>(Resource.Id.layoutCostCenter);
+                            if (viewGroup != null) viewGroup.Visibility = ViewStates.Gone;
+                            CostCenter = "";
+                        }
+                        break;
+                    case 9:
+                        // this is a material
+                        unknown = false;
+                        Material = splitData[0];
+                        //mMaterial.setEnabled(false);
+                        if (splitData.Length > 1)
+                        {
+                            Plant = splitData[1];
+                            // plant provided, disable field
+                            //mPlant.setEnabled(false);
+                            if (splitData.Length > 2)
+                            {
+                                StorageLocation = splitData[2];
+                                // storage location provided, disable field
+                                //mStorageLocation.setEnabled(false);
+                                if (splitData.Length > 3)
+                                {
+                                    Bin = splitData[3];
+                                    viewGroup = FindViewById<ViewGroup>(Resource.Id.layoutBin);
+                                    if (viewGroup != null) viewGroup.Visibility = ViewStates.Visible;
+                                }
+                            }
+                        }
+                        break;
+                }
+            }
+            else if (splitData[0].StartsWith("E")
+                  || splitData[0].StartsWith("U"))
+            {
+                // this is an ERSA or UNBW material
+                if (Regex.IsMatch(splitData[0].Substring(1, 10), "\\d{9}"))
+                {
+                    // material number correct
+                    unknown = false;
+                    Material = splitData[0].Substring(1, 10);
+                    if (splitData.Length > 1)
+                    {
+                        Plant = splitData[1];
+                        // plant provided, disable field
+                        //mPlant.setEnabled(false);
+                        if (splitData.Length > 2)
+                        {
+                            StorageLocation = splitData[2];
+                            // storage location provided, disable field
+                            //mStorageLocation.setEnabled(false);
+                            if (splitData.Length > 3)
+                            {
+                                Bin = splitData[3];
+                                //mBin.setEnabled(false);
+                                viewGroup = FindViewById<ViewGroup>(Resource.Id.layoutBin);
+                                if (viewGroup != null) viewGroup.Visibility = ViewStates.Visible;
+                            }
+                        }
+                    }
+                }
+            }
+            else if (splitData[0].StartsWith("K"))
+            {
+                // this is a vendor consignment material
+                if (Regex.IsMatch(splitData[0].Substring(1, 10), "\\d{9}"))
+                {
+                    unknown = false;
+                    Material = splitData[0].Substring(1, 10);
+                    //mMaterial.setEnabled(false);
+                    if (splitData.Length > 1)
+                    {
+                        if (Regex.IsMatch(splitData[1], "\\d{9}"))
+                        {
+                            // this is a vendor code
+                            Vendor = splitData[1];
+                            viewGroup = FindViewById<ViewGroup>(Resource.Id.layoutVendor);
+                            if (viewGroup != null) viewGroup.Visibility = ViewStates.Visible;
+                            //mVendor.setEnabled(false);
+                        }
+                        else
+                        {
+                            Plant = splitData[1];
+                            // plant provided, disable field
+                            //mPlant.setEnabled(false);
+                            if (splitData.Length > 2)
+                            {
+                                StorageLocation = splitData[2];
+                                // storage location provided, disable field
+                                //mStorageLocation.setEnabled(false);
+                                if (splitData.Length > 3)
+                                {
+                                    mVendor = splitData[3];
+                                    viewGroup = FindViewById<ViewGroup>(Resource.Id.layoutVendor);
+                                    if (viewGroup != null) viewGroup.Visibility = ViewStates.Visible;
+                                    //mVendor.setEnabled(false);
+                                    if (splitData.Length > 4)
+                                    {
+                                        mBin = splitData[4];
+                                        //mBin.setEnabled(false);
+                                        viewGroup = FindViewById<ViewGroup>(Resource.Id.layoutBin);
+                                        if (viewGroup != null) viewGroup.Visibility = ViewStates.Visible;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else if (splitData[0].StartsWith("C"))
+            {
+                // this is a cost center
+                unknown = false;
+                if (Option == OPTION_GOODS_ISSUE || Option == OPTION_GOODS_RETURN)
+                {
+                    // ignore cost center by inventory
+                    // show cost center, hide and clear work order
+                    viewGroup = FindViewById<ViewGroup>(Resource.Id.layoutCostCenter);
+                    if (viewGroup != null) viewGroup.Visibility = ViewStates.Visible;
+                    CostCenter = splitData[0].substring(1);
+                    viewGroup = FindViewById<ViewGroup>(Resource.Id.layoutWorkOrder);
+                    if (viewGroup != null) viewGroup.Visibility = ViewStates.Gone;
+                    WorkOrder = "";
+                }
+            }
+            else if (Regex.IsMatch(splitData[0], "V\\d{9}"))
+            {
+                // this is a vendor
+                unknown = false;
+                // display vendor
+                viewGroup = FindViewById<ViewGroup>(Resource.Id.layoutVendor);
+                if (viewGroup != null) viewGroup.Visibility = ViewStates.Visible;
+                //mVendor.setEnabled(false);
+                Vendor = splitData[0].substring(1);
+            }
+            else if (Regex.IsMatch(splitData[0], "I\\d{9}"))
+            {
+                // this is an inventory document
+                unknown = false;
+                if (Option == OPTION_INVENTORY_WO_DOCUMENT)
+                {
+                    // switch option from 3 to 4
+                    Option = OPTION_INVENTORY_WITH_DOCUMENT;
+                }
+                if (Option == OPTION_INVENTORY_WITH_DOCUMENT)
+                {
+                    // ignore inventory number at goods issue
+                    Inventory = splitData[0].Substring(1);
+                    //mInventory.setEnabled(false);
+                }
+            }
+            if (unknown) Snackbar.Make(FindViewById(Resource.Id.fab),
+                    Resource.String.barcode_unknown,
+                    Snackbar.LENGTH_LONG).Show();
         }
     }
 }
