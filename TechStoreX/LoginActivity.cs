@@ -148,7 +148,7 @@ namespace TechStoreX
                     result = CompareVersion(versionCurrent, DW_INTENT_SUPPORT_VERSION);
                 //            Log.i(TAG, "onCreate: result=" + result);
             }
-            catch (PackageManager.NameNotFoundException e1)
+            catch (PackageManager.NameNotFoundException)
             {
                 //            Log.e(TAG, "onCreate: NameNotFoundException:", e1);
             }

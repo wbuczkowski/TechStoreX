@@ -1,8 +1,11 @@
 using Android.App;
 using Android.OS;
+using Android.Support.Design.Widget;
 using Android.Support.V4.Content;
 using Android.Widget;
+using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace TechStoreX
 {
@@ -81,7 +84,7 @@ namespace TechStoreX
                         string line;
                         while ((line = streamReader.ReadLine()) != null)
                         {
-                            data.Add(line.split("\t"));
+                            data.Add(line.Split("\t"));
                         }
                     }
                 }
