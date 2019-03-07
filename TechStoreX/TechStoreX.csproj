@@ -128,7 +128,7 @@
     <AndroidResource Include="Resources\drawable\ic_supermarket_barcode.xml" />
     <AndroidResource Include="Resources\drawable\ic_sync_black_24dp.xml" />
     <AndroidResource Include="Resources\drawable\logo_grey.png" />
-    <AndroidResource Include="Resources\drawable-v24\ic_launcher_foreground.xml" />
+    <AndroidResource Include="Resources\drawable\ic_launcher_foreground.xml" />
     <AndroidResource Include="Resources\values\colors.xml" />
     <AndroidResource Include="Resources\values\dimens.xml" />
     <AndroidResource Include="Resources\values\ids.xml" />
