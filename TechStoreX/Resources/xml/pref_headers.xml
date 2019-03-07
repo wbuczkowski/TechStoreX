@@ -3,13 +3,13 @@
     <!-- These settings headers are only used on tablets. -->
 
     <header
-        android:fragment="TechStoreX.SettingsActivity_ScannerPreferenceFragment"
+        android:fragment="TechStoreX.SettingsActivity.ScannerPreferenceFragment"
         android:icon="@drawable/ic_barcode_grey_24dp"
         android:title="@string/pref_header_scanner" />
 
     <header
-        android:fragment="TechStoreX.SettingsActivity_DefaultsPreferenceFragment"
-        android:icon="@drawable/ic_info_black_24dp"
+        android:fragment="TechStoreX.SettingsActivity.DefaultsPreferenceFragment"
+        android:icon="@drawable/ic_info_grey_24dp"
         android:title="@string/pref_header_defaults" />
 
 </preference-headers>

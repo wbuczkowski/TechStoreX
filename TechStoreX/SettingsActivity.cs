@@ -5,6 +5,7 @@ using Android.Content;
 using Android.Content.Res;
 using Android.OS;
 using Android.Preferences;
+using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 
@@ -159,9 +160,10 @@ namespace TechStoreX
             return true;
         }
 
+        [Register("TechStoreX.SettingsActivity.ScannerPreferenceFragment")]
         public class ScannerPreferenceFragment : PreferenceFragment
         {
-            public ScannerPreferenceFragment() { }
+            // public ScannerPreferenceFragment() { }
             public override void OnCreate(Bundle savedInstanceState)
             {
                 base.OnCreate(savedInstanceState);
@@ -181,9 +183,10 @@ namespace TechStoreX
             }
         }
 
+        [Register("TechStoreX.SettingsActivity.DefaultsPreferenceFragment")]
         public class DefaultsPreferenceFragment : PreferenceFragment
         {
-            public DefaultsPreferenceFragment() { }
+            // public DefaultsPreferenceFragment() { }
             public override void OnCreate(Bundle savedInstanceState)
             {
                 base.OnCreate(savedInstanceState);

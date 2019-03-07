@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -122,11 +122,12 @@
     <AndroidResource Include="Resources\layout\content_main.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_info_black_24dp.xml" />
-    <AndroidResource Include="Resources\drawable\ic_save_black_24dp.xml" />
-    <AndroidResource Include="Resources\drawable\ic_settings_black_24dp.xml" />
-    <AndroidResource Include="Resources\drawable\ic_supermarket_barcode.xml" />
-    <AndroidResource Include="Resources\drawable\ic_sync_black_24dp.xml" />
+    <AndroidResource Include="Resources\drawable\ic_barcode_grey_24dp.xml" />
+    <AndroidResource Include="Resources\drawable\ic_barcode_white_24dp.xml" />
+    <AndroidResource Include="Resources\drawable\ic_info_grey_24dp.xml" />
+    <AndroidResource Include="Resources\drawable\ic_save_white_24dp.xml" />
+    <AndroidResource Include="Resources\drawable\ic_settings_white_24dp.xml" />
+    <AndroidResource Include="Resources\drawable\ic_sync_white_24dp.xml" />
     <AndroidResource Include="Resources\drawable\logo_grey.png" />
     <AndroidResource Include="Resources\drawable\ic_launcher_foreground.xml" />
     <AndroidResource Include="Resources\values\colors.xml" />

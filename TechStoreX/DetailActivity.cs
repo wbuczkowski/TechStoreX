@@ -9,6 +9,7 @@ using Android.Widget;
 using Java.Text;
 using Java.Util;
 using System;
+using System.Text.RegularExpressions;
 
 namespace TechStoreX
 {
@@ -580,7 +581,7 @@ namespace TechStoreX
 
         protected override void ProcessBarcode(string data)
         {
-            string[] splitData = data.split(" ");
+            string[] splitData = data.Split(" ");
             bool unknown = true;
             ViewGroup viewGroup;
             if (Regex.IsMatch(splitData[0], "\\d+"))
@@ -597,31 +598,31 @@ namespace TechStoreX
                             // show work order, hide and clear cost center
                             viewGroup = FindViewById<ViewGroup>(Resource.Id.layoutWorkOrder);
                             if (viewGroup != null) viewGroup.Visibility = ViewStates.Visible;
-                            WorkOrder = splitData[0];
+                            WorkOrder.Text = splitData[0];
                             //mWorkOrder.setEnabled(false);
                             viewGroup = FindViewById<ViewGroup>(Resource.Id.layoutCostCenter);
                             if (viewGroup != null) viewGroup.Visibility = ViewStates.Gone;
-                            CostCenter = "";
+                            CostCenter.Text = "";
                         }
                         break;
                     case 9:
                         // this is a material
                         unknown = false;
-                        Material = splitData[0];
+                        Material.Text = splitData[0];
                         //mMaterial.setEnabled(false);
                         if (splitData.Length > 1)
                         {
-                            Plant = splitData[1];
+                            Plant.Text = splitData[1];
                             // plant provided, disable field
                             //mPlant.setEnabled(false);
                             if (splitData.Length > 2)
                             {
-                                StorageLocation = splitData[2];
+                                StorageLocation.Text = splitData[2];
                                 // storage location provided, disable field
                                 //mStorageLocation.setEnabled(false);
                                 if (splitData.Length > 3)
                                 {
-                                    Bin = splitData[3];
+                                    Bin.Text = splitData[3];
                                     viewGroup = FindViewById<ViewGroup>(Resource.Id.layoutBin);
                                     if (viewGroup != null) viewGroup.Visibility = ViewStates.Visible;
                                 }
@@ -638,20 +639,20 @@ namespace TechStoreX
                 {
                     // material number correct
                     unknown = false;
-                    Material = splitData[0].Substring(1, 10);
+                    Material.Text = splitData[0].Substring(1, 10);
                     if (splitData.Length > 1)
                     {
-                        Plant = splitData[1];
+                        Plant.Text = splitData[1];
                         // plant provided, disable field
                         //mPlant.setEnabled(false);
                         if (splitData.Length > 2)
                         {
-                            StorageLocation = splitData[2];
+                            StorageLocation.Text = splitData[2];
                             // storage location provided, disable field
                             //mStorageLocation.setEnabled(false);
                             if (splitData.Length > 3)
                             {
-                                Bin = splitData[3];
+                                Bin.Text = splitData[3];
                                 //mBin.setEnabled(false);
                                 viewGroup = FindViewById<ViewGroup>(Resource.Id.layoutBin);
                                 if (viewGroup != null) viewGroup.Visibility = ViewStates.Visible;
@@ -666,37 +667,37 @@ namespace TechStoreX
                 if (Regex.IsMatch(splitData[0].Substring(1, 10), "\\d{9}"))
                 {
                     unknown = false;
-                    Material = splitData[0].Substring(1, 10);
+                    Material.Text = splitData[0].Substring(1, 10);
                     //mMaterial.setEnabled(false);
                     if (splitData.Length > 1)
                     {
                         if (Regex.IsMatch(splitData[1], "\\d{9}"))
                         {
                             // this is a vendor code
-                            Vendor = splitData[1];
+                            Vendor.Text = splitData[1];
                             viewGroup = FindViewById<ViewGroup>(Resource.Id.layoutVendor);
                             if (viewGroup != null) viewGroup.Visibility = ViewStates.Visible;
                             //mVendor.setEnabled(false);
                         }
                         else
                         {
-                            Plant = splitData[1];
+                            Plant.Text = splitData[1];
                             // plant provided, disable field
                             //mPlant.setEnabled(false);
                             if (splitData.Length > 2)
                             {
-                                StorageLocation = splitData[2];
+                                StorageLocation.Text = splitData[2];
                                 // storage location provided, disable field
                                 //mStorageLocation.setEnabled(false);
                                 if (splitData.Length > 3)
                                 {
-                                    mVendor = splitData[3];
+                                    Vendor.Text = splitData[3];
                                     viewGroup = FindViewById<ViewGroup>(Resource.Id.layoutVendor);
                                     if (viewGroup != null) viewGroup.Visibility = ViewStates.Visible;
                                     //mVendor.setEnabled(false);
                                     if (splitData.Length > 4)
                                     {
-                                        mBin = splitData[4];
+                                        Bin.Text = splitData[4];
                                         //mBin.setEnabled(false);
                                         viewGroup = FindViewById<ViewGroup>(Resource.Id.layoutBin);
                                         if (viewGroup != null) viewGroup.Visibility = ViewStates.Visible;
@@ -717,10 +718,10 @@ namespace TechStoreX
                     // show cost center, hide and clear work order
                     viewGroup = FindViewById<ViewGroup>(Resource.Id.layoutCostCenter);
                     if (viewGroup != null) viewGroup.Visibility = ViewStates.Visible;
-                    CostCenter = splitData[0].substring(1);
+                    CostCenter.Text = splitData[0].Substring(1);
                     viewGroup = FindViewById<ViewGroup>(Resource.Id.layoutWorkOrder);
                     if (viewGroup != null) viewGroup.Visibility = ViewStates.Gone;
-                    WorkOrder = "";
+                    WorkOrder.Text = "";
                 }
             }
             else if (Regex.IsMatch(splitData[0], "V\\d{9}"))
@@ -731,7 +732,7 @@ namespace TechStoreX
                 viewGroup = FindViewById<ViewGroup>(Resource.Id.layoutVendor);
                 if (viewGroup != null) viewGroup.Visibility = ViewStates.Visible;
                 //mVendor.setEnabled(false);
-                Vendor = splitData[0].substring(1);
+                Vendor.Text = splitData[0].Substring(1);
             }
             else if (Regex.IsMatch(splitData[0], "I\\d{9}"))
             {
@@ -745,13 +746,13 @@ namespace TechStoreX
                 if (Option == OPTION_INVENTORY_WITH_DOCUMENT)
                 {
                     // ignore inventory number at goods issue
-                    Inventory = splitData[0].Substring(1);
+                    Inventory.Text = splitData[0].Substring(1);
                     //mInventory.setEnabled(false);
                 }
             }
             if (unknown) Snackbar.Make(FindViewById(Resource.Id.fab),
                     Resource.String.barcode_unknown,
-                    Snackbar.LENGTH_LONG).Show();
+                    Snackbar.LengthLong).Show();
         }
     }
 }
