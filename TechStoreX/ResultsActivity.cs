@@ -48,24 +48,24 @@ namespace TechStoreX
                 tv.Text = cell;
                 tr.AddView(tv);
             }
-            // TODO
-            //    tl.ViewTreeObserver.AddOnGlobalLayoutListener(
-            //            new ViewTreeObserver.OnGlobalLayoutListener() {
-
-            //            @Override
-            //                public void onGlobalLayout() {
-            //        if (tl.getChildCount() > 0) {
-            //            TableRow tr = (TableRow)tl.getChildAt(0);
-            //            TableRow trH = findViewById(R.id.tablerow_header);
-            //            TextView tv, tvH;
-            //            for (int j = 0; j < tr.getChildCount(); j++) {
-            //                tv = (TextView)tr.getChildAt(j);
-            //                tvH = (TextView)trH.getChildAt(j);
-            //                tvH.setWidth(tv.getWidth());
-            //            }
-            //        }
-            //    }
-            //});
+            tl.ViewTreeObserver.GlobalLayout += (sender, args) =>
+            {
+                TableRow tr, trH;
+                View tv, tvH;
+                trH = FindViewById<TableRow>(Resource.Id.tablerow_header);
+                // if (tl.ChildCount > 0)
+                for (int i = 0; i < tl.ChildCount; i++)
+                {
+                    // tr = (TableRow)tl.GetChildAt(0);
+                    tr = (TableRow)tl.GetChildAt(i);
+                    for (int j = 0; j < tr.ChildCount; j++)
+                    {
+                        tv = tr.GetChildAt(j);
+                        tvH = trH.GetChildAt(j);
+                        tvH.Width = tv.Width;
+                    }
+                }
+            };
         }
 
         private List<string[]> ReadData()
