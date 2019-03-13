@@ -355,7 +355,7 @@ namespace TechStoreX
                 /* C# code to read file using System.IO         */
                 /*************************************************/
                 // slower!!!
-                string path = ((int)Build.VERSION.SdkInt >= 19) ?
+                string path = (Build.VERSION.SdkInt >= BuildVersionCodes.Kitkat) ?
                     Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDocuments).AbsolutePath :
                     Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + "/Documents";
                 path = Path.Combine(Path.Combine(path, GetString(Resource.String.app_name)), GetString(Resource.String.file_name));
@@ -586,7 +586,7 @@ namespace TechStoreX
                 /*************************************************/
                 /* C# code to write file using System.IO         */
                 /*************************************************/
-                string path = ((int)Build.VERSION.SdkInt >= 19) ?
+                string path = (Build.VERSION.SdkInt >= BuildVersionCodes.Kitkat) ?
                     Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDocuments).AbsolutePath :
                     Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + "/Documents";
                 path = Path.Combine(path, GetString(Resource.String.app_name));

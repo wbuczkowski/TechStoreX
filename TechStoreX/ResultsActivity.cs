@@ -75,7 +75,7 @@ namespace TechStoreX
             List<string[]> data = new List<string[]>();
             if (Android.OS.Environment.ExternalStorageState == Android.OS.Environment.MediaMounted)
             {
-                string path = ((int)Build.VERSION.SdkInt >= 19) ?
+                string path = (Build.VERSION.SdkInt >= BuildVersionCodes.Kitkat) ?
                     Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDocuments).AbsolutePath :
                     Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + "/Documents";
                 path = Path.Combine(Path.Combine(path, GetString(Resource.String.app_name)), GetString(Resource.String.file_name));
