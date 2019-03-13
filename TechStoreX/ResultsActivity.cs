@@ -43,15 +43,17 @@ namespace TechStoreX
             tr = FindViewById<TableRow>(Resource.Id.tablerow_header);
             foreach (string cell in header)
             {
-                tv = new TextView(this);
-                tv.Background = ContextCompat.GetDrawable(this, Android.Resource.Drawable.EditBoxBackground);
-                tv.Text = cell;
+                tv = new TextView(this)
+                {
+                    Background = ContextCompat.GetDrawable(this, Android.Resource.Drawable.EditBoxBackground),
+                    Text = cell
+                };
                 tr.AddView(tv);
             }
             tl.ViewTreeObserver.GlobalLayout += (sender, args) =>
             {
-                TableRow tr, trH;
-                View tv, tvH;
+                TableRow trH;
+                TextView tvH;
                 trH = FindViewById<TableRow>(Resource.Id.tablerow_header);
                 // if (tl.ChildCount > 0)
                 for (int i = 0; i < tl.ChildCount; i++)
@@ -60,9 +62,9 @@ namespace TechStoreX
                     tr = (TableRow)tl.GetChildAt(i);
                     for (int j = 0; j < tr.ChildCount; j++)
                     {
-                        tv = tr.GetChildAt(j);
-                        tvH = trH.GetChildAt(j);
-                        tvH.Width = tv.Width;
+                        tv = (TextView)tr.GetChildAt(j);
+                        tvH = (TextView)trH.GetChildAt(j);
+                        tvH.SetWidth(tv.Width);
                     }
                 }
             };

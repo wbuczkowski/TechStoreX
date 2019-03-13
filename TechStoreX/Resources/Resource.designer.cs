@@ -2528,9 +2528,6 @@ namespace TechStoreX
 			// aapt resource value: 0x7f02005e
 			public const int ic_launcher_foreground = 2130837598;
 			
-			// aapt resource value: 0x7f020078
-			public const int ic_launcher_foreground_1 = 2130837624;
-			
 			// aapt resource value: 0x7f02005f
 			public const int ic_save_white_24dp = 2130837599;
 			
