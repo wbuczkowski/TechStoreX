@@ -13,7 +13,7 @@ using System.Text.RegularExpressions;
 
 namespace TechStoreX
 {
-    [Activity(Label = "@string/title_activity_detail")]
+    [Activity(Label = "@string/title_activity_detail", ParentActivity = MainActivity)]
     public class DetailActivity : AppActivity
     {
         private const string KEY_PREF_DEFAULT_PLANT = "pref_default_plant";
