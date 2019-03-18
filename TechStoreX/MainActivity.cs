@@ -10,7 +10,7 @@ using System.IO;
 
 namespace TechStoreX
 {
-    [Activity(Label = "@string/app_name", ParentActivity = LoginActivity)]
+    [Activity(Label = "@string/app_name", ParentActivity = typeof(LoginActivity))]
     public class MainActivity : AppActivity, View.IOnClickListener
     {
         private const int RC_GET_DATA = 9101;
