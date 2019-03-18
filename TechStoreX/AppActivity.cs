@@ -67,10 +67,10 @@ namespace TechStoreX
                         "Please select scanning technology!", Snackbar.LengthLong)
                         .SetAction(Resource.String.action_settings, view =>
                         {
-                            Intent intent;
-                            intent = new Intent(view.Context, typeof(SettingsActivity));
+                            Intent intent = new Intent(view.Context, typeof(SettingsActivity));
                             intent.PutExtra(PreferenceActivity.ExtraShowFragment,
-                                typeof(SettingsActivity.ScannerPreferenceFragment).Name);
+                                // typeof(SettingsActivity.ScannerPreferenceFragment).Name
+                                "TechStoreX.SettingsActivity.ScannerPreferenceFragment");
                             intent.PutExtra(PreferenceActivity.ExtraNoHeaders, true);
                             StartActivity(intent);
                         }).Show();
@@ -268,10 +268,10 @@ namespace TechStoreX
                             Snackbar.LengthLong)
                             .SetAction(Resource.String.action_settings, v =>
                             {
-                                Intent intent1;
-                                intent1 = new Intent(appActivity, typeof(SettingsActivity));
+                                Intent intent1 = new Intent(appActivity, typeof(SettingsActivity));
                                 intent1.PutExtra(PreferenceActivity.ExtraShowFragment,
-                                    typeof(SettingsActivity.ScannerPreferenceFragment).Name);
+                                    // typeof(SettingsActivity.ScannerPreferenceFragment).Name
+                                    "TechStoreX.SettingsActivity.ScannerPreferenceFragment");
                                 intent1.PutExtra(PreferenceActivity.ExtraNoHeaders, true);
                                 appActivity.StartActivity(intent1);
                             })
