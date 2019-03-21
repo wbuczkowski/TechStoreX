@@ -7,6 +7,10 @@ using Android.Views;
 using Android.Widget;
 using System.Text.RegularExpressions;
 using System.IO;
+using Android.Support.V4.Content;
+using Android;
+using Android.Content.PM;
+using Android.Support.V4.App;
 
 namespace TechStoreX
 {
@@ -14,7 +18,7 @@ namespace TechStoreX
     public class MainActivity : AppActivity, View.IOnClickListener
     {
         private const int RC_GET_DATA = 9101;
-        private const int REQUEST_PREMISSION = 9102;
+        private const int REQUEST_PREMISSION_WRITE = 9102;
         private const string STATE_USERNAME = "UserName";
 
         private string UserName;
@@ -653,7 +657,7 @@ namespace TechStoreX
             if (requestCode == REQUEST_PREMISSION_WRITE)
             {
                 // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                if (grantResults.Length > 0 && grantResults[0] == Permission.Granted)
                 {
                     // permission was granted, yay!
                     // Read the file and continue

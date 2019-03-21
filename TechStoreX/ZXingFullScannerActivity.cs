@@ -8,6 +8,10 @@ using Android.Content;
 using FragmentManager = Android.Support.V4.App.FragmentManager;
 using DialogFragment = Android.Support.V4.App.DialogFragment;
 using Google.ZXing;
+using Android.Support.V4.Content;
+using Android;
+using Android.Content.PM;
+using Android.Support.V4.App;
 
 namespace TechStoreX
 {
@@ -256,7 +260,7 @@ namespace TechStoreX
             if (requestCode == REQUEST_PREMISSION_CAMERA)
             {
                 // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                if (grantResults.Length > 0 && grantResults[0] == Permission.Granted)
                 {
                     // permission was granted, yay!
                     // Continue
