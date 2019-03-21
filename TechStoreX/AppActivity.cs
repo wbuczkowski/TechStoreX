@@ -86,7 +86,7 @@ namespace TechStoreX
                 RegisterReceiver(receiver, filter);
             }
             // check permissions in runtime
-            if ((int)Build.VERSION.SdkInt >= 23) RequestPermissions();
+            if ((int)Android.OS.Build.VERSION.SdkInt >= 23) RequestPermissions();
             // set up logout timer
             logoutTime = int.Parse(sharedPref.GetString(KEY_PREF_TIMEOUT, VALUE_PREF_TIMEOUT_DEFAULT));
             LogoutTimerUtility.StartLogoutTimer(this, this, logoutTime);
@@ -357,8 +357,8 @@ namespace TechStoreX
             StartActivity(new Intent(this, typeof(LoginActivity)));
         }
 
-        protected void ProcessBarcode(String data);
+        protected virtual void ProcessBarcode(String data) { }
 
-        protected void RequestPermissions();
+        protected virtual void RequestPermissions() { }
     }
 }

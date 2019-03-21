@@ -163,7 +163,7 @@ namespace TechStoreX
         [Register("TechStoreX.SettingsActivity.ScannerPreferenceFragment")]
         public class ScannerPreferenceFragment : PreferenceFragment
         {
-            // public ScannerPreferenceFragment() { }
+            public ScannerPreferenceFragment() { }
             public override void OnCreate(Bundle savedInstanceState)
             {
                 base.OnCreate(savedInstanceState);
@@ -186,7 +186,7 @@ namespace TechStoreX
         [Register("TechStoreX.SettingsActivity.DefaultsPreferenceFragment")]
         public class DefaultsPreferenceFragment : PreferenceFragment
         {
-            // public DefaultsPreferenceFragment() { }
+            public DefaultsPreferenceFragment() { }
             public override void OnCreate(Bundle savedInstanceState)
             {
                 base.OnCreate(savedInstanceState);

@@ -3996,6 +3996,9 @@ namespace TechStoreX
 			// aapt resource value: 0x7f0b0096
 			public const int AlertDialog_AppCompat_Light = 2131427478;
 			
+			// aapt resource value: 0x7f0b0182
+			public const int AlertDialogTheme = 2131427714;
+			
 			// aapt resource value: 0x7f0b0097
 			public const int Animation_AppCompat_Dialog = 2131427479;
 			
