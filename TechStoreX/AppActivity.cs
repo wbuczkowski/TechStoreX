@@ -86,7 +86,7 @@ namespace TechStoreX
                 RegisterReceiver(receiver, filter);
             }
             // check permissions in runtime
-            RequestPermissions();
+            if ((int)Build.VERSION.SdkInt >= 23) RequestPermissions();
             // set up logout timer
             logoutTime = int.Parse(sharedPref.GetString(KEY_PREF_TIMEOUT, VALUE_PREF_TIMEOUT_DEFAULT));
             LogoutTimerUtility.StartLogoutTimer(this, this, logoutTime);
