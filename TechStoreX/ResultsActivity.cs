@@ -132,10 +132,5 @@ namespace TechStoreX
             //}
             return data;
         }
-
-        protected override void ProcessBarcode(string data)
-        {
-            // dummy
-        }
     }
 }

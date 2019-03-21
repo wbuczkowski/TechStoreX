@@ -86,19 +86,7 @@ namespace TechStoreX
                 RegisterReceiver(receiver, filter);
             }
             // check permissions in runtime
-            if (scanTech == VALUE_PREF_SCAN_ZBAR_LIB || scanTech == VALUE_PREF_SCAN_ZBAR_LIB)
-            {
-                if (ContextCompat.CheckSelfPermission(this, Manifest.Permission.Camera) != (int)Permission.Granted)
-                {
-                    // Camera permission is not granted. If necessary display rationale & request.
-                    ActivityCompat.RequestPermissions(this, new String[] { Manifest.Permission.Camera }, 0);
-                }
-            }
-            if (ContextCompat.CheckSelfPermission(this, Manifest.Permission.WriteExternalStorage) != (int)Permission.Granted)
-            {
-                // Write external storage permission is not granted. If necessary display rationale & request.
-                ActivityCompat.RequestPermissions(this, new String[] { Manifest.Permission.WriteExternalStorage }, 0);
-            }
+            RequestPermissions();
             // set up logout timer
             logoutTime = int.Parse(sharedPref.GetString(KEY_PREF_TIMEOUT, VALUE_PREF_TIMEOUT_DEFAULT));
             LogoutTimerUtility.StartLogoutTimer(this, this, logoutTime);
@@ -369,6 +357,8 @@ namespace TechStoreX
             StartActivity(new Intent(this, typeof(LoginActivity)));
         }
 
-        protected abstract void ProcessBarcode(String data);
+        protected void ProcessBarcode(String data);
+
+        protected void RequestPermissions();
     }
 }

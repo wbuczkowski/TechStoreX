@@ -14,6 +14,7 @@ namespace TechStoreX
     public class MainActivity : AppActivity, View.IOnClickListener
     {
         private const int RC_GET_DATA = 9101;
+        private const int REQUEST_PREMISSION = 9102;
         private const string STATE_USERNAME = "UserName";
 
         private string UserName;
@@ -137,7 +138,7 @@ namespace TechStoreX
                     break;
             }
         }
-        
+
         protected override void ProcessBarcode(string data)
         {
             string option = "", materialNumber = "",
@@ -615,6 +616,60 @@ namespace TechStoreX
                 Snackbar.Make(FindViewById(Resource.Id.fab),
                     Resource.String.storage_error, Snackbar.LengthLong).Show();
                 return false;
+            }
+        }
+
+        protected override void RequestPermissions()
+        {
+            base.RequestPermissions();
+            if (ContextCompat.CheckSelfPermission(this, Manifest.Permission.WriteExternalStorage) != (int)Permission.Granted)
+            {
+                // Write external storage permission is not granted. If necessary display rationale & request.
+                // if (ActivityCompat.ShouldShowRequestPermissionRationale(this, Manifest.Permission.WriteExternalStorage))
+                // {
+                //     // Provide an additional rationale to the user if the permission was not granted
+                //     // and the user would benefit from additional context for the use of the permission.
+                //     // For example if the user has previously denied the permission.
+                //     Snackbar.Make(FindViewById(Resource.Id.fab),
+                //                    Resource.String.permission_write_rationale,
+                //                    Snackbar.LengthIndefinite)
+                //             .SetAction(Android.Resource.String.Ok,
+                //                        new Action<View>(delegate (View obj)
+                //                        {
+                //                            ActivityCompat.RequestPermissions(this, new string[] { Manifest.Permission.WriteExternalStorage }, REQUEST_PREMISSION_WRITE);
+                //                        }
+                //             )
+                //     ).Show();
+                // }
+                // else
+                // {
+                ActivityCompat.RequestPermissions(this, new string[] { Manifest.Permission.WriteExternalStorage }, REQUEST_PREMISSION_WRITE);
+                // }
+            }
+        }
+
+        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
+        {
+            if (requestCode == REQUEST_PREMISSION_WRITE)
+            {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+                    // permission was granted, yay!
+                    // Read the file and continue
+                    SetStatusText();
+                }
+                else
+                {
+                    // permission denied, boo!
+                    // Cannot continue, finish...
+                    Finish();
+                }
+            }
+            else
+            {
+                // other permissions this app might request.
+                base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
             }
         }
     }

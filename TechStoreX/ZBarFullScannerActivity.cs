@@ -19,6 +19,7 @@ namespace TechStoreX
         private const string AUTO_FOCUS_STATE = "AUTO_FOCUS_STATE";
         private const string SELECTED_FORMATS = "SELECTED_FORMATS";
         private const string CAMERA_ID = "CAMERA_ID";
+        private const int REQUEST_PREMISSION_CAMERA = 9101;
         private ZBarScannerView ScannerView;
         private bool Flash;
         private bool AutoFocus;
@@ -217,6 +218,59 @@ namespace TechStoreX
         protected override void ProcessBarcode(string data)
         {
             throw new System.NotImplementedException();
+        }
+
+        protected override void RequestPermissions()
+        {
+            base.RequestPermissions();
+            if (ContextCompat.CheckSelfPermission(this, Manifest.Permission.Camera) != (int)Permission.Granted)
+            {
+                // Camera permission is not granted. If necessary display rationale & request.
+                // if (ActivityCompat.ShouldShowRequestPermissionRationale(this, Manifest.Permission.Camera))
+                // {
+                //     // Provide an additional rationale to the user if the permission was not granted
+                //     // and the user would benefit from additional context for the use of the permission.
+                //     // For example if the user has previously denied the permission.
+                //     Snackbar.Make(FindViewById(Resource.Id.fab),
+                //                    Resource.String.permission_write_rationale,
+                //                    Snackbar.LengthIndefinite)
+                //             .SetAction(Android.Resource.String.Ok,
+                //                        new Action<View>(delegate (View obj)
+                //                        {
+                //                            ActivityCompat.RequestPermissions(this, new string[] { Manifest.Permission.Camera }, REQUEST_PREMISSION_CAMERA);
+                //                        }
+                //             )
+                //     ).Show();
+                // }
+                // else
+                // {
+                ActivityCompat.RequestPermissions(this, new string[] { Manifest.Permission.Camera }, REQUEST_PREMISSION_CAMERA);
+                // }
+            }
+        }
+
+        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
+        {
+            if (requestCode == REQUEST_PREMISSION_CAMERA)
+            {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+                    // permission was granted, yay!
+                    // Continue
+                }
+                else
+                {
+                    // permission denied, boo!
+                    // Cannot continue, finish...
+                    Finish();
+                }
+            }
+            else
+            {
+                // other permissions this app might request.
+                base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+            }
         }
     }
 }
