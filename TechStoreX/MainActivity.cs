@@ -14,7 +14,9 @@ using Android.Support.V4.App;
 
 namespace TechStoreX
 {
-    [Activity(Label = "@string/app_name", ParentActivity = typeof(LoginActivity))]
+    [Activity(Label = "@string/app_name", 
+        ParentActivity = typeof(LoginActivity), 
+        WindowSoftInputMode = SoftInput.AdjustResize)]
     public class MainActivity : AppActivity, View.IOnClickListener
     {
         private const int RC_GET_DATA = 9101;

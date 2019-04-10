@@ -14,7 +14,9 @@ using Android.Widget;
 
 namespace TechStoreX
 {
-    [Activity(Label = "@string/app_name", MainLauncher = true)]
+    [Activity(Label = "@string/app_name", 
+        MainLauncher = true, 
+        WindowSoftInputMode = SoftInput.AdjustResize)]
     public class LoginActivity : AppActivity
     {
         private const string KEY_PREF_ENABLE_DATAWEDGE = "pref_enable_datawedge";
